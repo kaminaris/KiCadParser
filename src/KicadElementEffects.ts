@@ -1,11 +1,12 @@
+import {
+	KicadElementJustify, KicadJustifyHorizontal, KicadJustifyVertical
+}                           from 'src/app/Lib/Kicad/src/KicadElementJustify';
 import { KicadElementFont } from './KicadElementFont';
 import { KicadElementHide } from './KicadElementHide';
 import { KicadElement }     from './KicadElement';
 
 export class KicadElementEffects extends KicadElement {
 	override name = 'effects';
-	// hidden = false;
-	// justify: 'left' | 'middle' | 'right' = 'middle';
 
 	setHidden(value: boolean) {
 		let found = this.findFirstChildByClass(KicadElementHide);
@@ -14,6 +15,15 @@ export class KicadElementEffects extends KicadElement {
 			this.addChild(found);
 		}
 		found.value = value;
+	}
+
+	setJustify(
+		horizontal?: KicadJustifyHorizontal,
+		vertical?: KicadJustifyVertical,
+		mirrored?: boolean
+	) {
+		const justifyEl = this.findOrCreateChildByClass(KicadElementJustify);
+		justifyEl.setJustify(horizontal, vertical, mirrored);
 	}
 
 	getOrCreateFont(): KicadElementFont {

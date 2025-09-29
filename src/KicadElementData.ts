@@ -27,7 +27,6 @@ export class KicadElementData extends KicadElement {
 		for (const attribute of this.attributes) {
 			combined += attribute.value as string;
 		}
-		console.log(this);
 		// this.attributes.length = 0;
 		this.data = window.atob(combined);
 	}

@@ -1,5 +1,10 @@
-import { KicadElementColor } from './KicadElementColor';
-import { KicadElement }      from './KicadElement';
+import { KicadElementBold }      from 'src/app/Lib/Kicad/src/KicadElementBold';
+import { KicadElementFace }      from 'src/app/Lib/Kicad/src/KicadElementFace';
+import { KicadElementItalic }    from 'src/app/Lib/Kicad/src/KicadElementItalic';
+import { KicadElementSize }      from 'src/app/Lib/Kicad/src/KicadElementSize';
+import { KicadElementThickness } from 'src/app/Lib/Kicad/src/KicadElementThickness';
+import { KicadElementColor }     from './KicadElementColor';
+import { KicadElement }          from './KicadElement';
 
 /**
  * 			(font
@@ -14,66 +19,36 @@ import { KicadElement }      from './KicadElement';
 export class KicadElementFont extends KicadElement {
 	override name = 'font';
 
-	setSize(width: number, height: number) {
-		const foundAttr = this.findFirstChildByName('size');
-		if (foundAttr) {
-			foundAttr.attributes[0].value = width;
-			foundAttr.attributes[1].value = height;
-		}
-		else {
-			const attr = new KicadElement();
-			attr.name = 'size';
-			attr.attributes.push({ format: 'numeric', value: width });
-			attr.attributes.push({ format: 'numeric', value: height });
-			this.addChild(attr);
-		}
+	setFace(face: string) {
+		const foundAttr = this.findOrCreateChildByClass(KicadElementFace);
+		foundAttr.value = face;
 	}
 
-	setFace(face: string) {
-		const foundAttr = this.findFirstChildByName('face');
-		if (foundAttr) {
-			foundAttr.attributes[0].value = face;
-		}
-		else {
-			const attr = new KicadElement();
-			attr.name = 'face';
-			attr.attributes.push({ format: 'quoted', value: face });
-			this.addChild(attr);
-		}
+	setSize(width: number, height: number) {
+		const foundAttr = this.findOrCreateChildByClass(KicadElementSize);
+
+		foundAttr.width = width;
+		foundAttr.height = height;
+	}
+
+	setThickness(thickness: number) {
+		let foundAttr = this.findOrCreateChildByClass(KicadElementThickness);
+
+		foundAttr.value = thickness;
 	}
 
 	setBold(bold: boolean) {
-		const foundAttr = this.findFirstChildByName('bold');
-		if (foundAttr) {
-			foundAttr.attributes[0].value = bold;
-		}
-		else {
-			const attr = new KicadElement();
-			attr.name = 'bold';
-			attr.attributes.push({ format: 'boolean', value: bold });
-			this.addChild(attr);
-		}
+		const foundAttr = this.findOrCreateChildByClass(KicadElementBold);
+		foundAttr.value = bold;
 	}
 
 	setItalic(italic: boolean) {
-		let foundAttr = this.findFirstChildByName('italic');
-		if (foundAttr) {
-			foundAttr.attributes[0].value = italic;
-		}
-		else {
-			const attr = new KicadElement();
-			attr.name = 'italic';
-			attr.attributes.push({ format: 'boolean', value: italic });
-			this.addChild(attr);
-		}
+		const foundAttr = this.findOrCreateChildByClass(KicadElementItalic);
+		foundAttr.value = italic;
 	}
 
 	setColor(r: number, g: number, b: number, a: number) {
-		let foundAttr = this.findFirstChildByClass(KicadElementColor);
-		if (!foundAttr) {
-			foundAttr = new KicadElementColor();
-			this.addChild(foundAttr);
-		}
+		const foundAttr = this.findOrCreateChildByClass(KicadElementColor);
 
 		foundAttr.setColor(r, g, b, a);
 	}

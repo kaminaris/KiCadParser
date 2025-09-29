@@ -1,3 +1,7 @@
+import { KicadElementBold }             from 'src/app/Lib/Kicad/src/KicadElementBold';
+import { KicadElementFace }             from 'src/app/Lib/Kicad/src/KicadElementFace';
+import { KicadElementItalic }           from 'src/app/Lib/Kicad/src/KicadElementItalic';
+import { KicadElementThickness }        from './KicadElementThickness';
 import { KicadElementFill }             from './KicadElementFill';
 import { KicadElementEnd }              from './KicadElementEnd';
 import { KicadElementFootprint }        from './KicadElementFootprint';
@@ -143,6 +147,9 @@ export class KicadParser {
 			case 'diameter':
 				el = new KicadElementDiameter();
 				break;
+			case 'thickness':
+				el = new KicadElementThickness();
+				break;
 			case 'radius':
 				el = new KicadElementRadius();
 				break;
@@ -158,6 +165,9 @@ export class KicadParser {
 			/** Strings */
 			case 'name':
 				el = new KicadElementName();
+				break;
+			case 'face':
+				el = new KicadElementFace();
 				break;
 			case 'layer':
 				el = new KicadElementLayer();
@@ -192,7 +202,13 @@ export class KicadParser {
 			case 'property':
 				el = new KicadElementProperty();
 				break;
-			// Boleans
+			/** Booleans and flags */
+			case 'bold':
+				el = new KicadElementBold();
+				break;
+			case 'italic':
+				el = new KicadElementItalic();
+				break;
 			case 'dnp':
 				el = new KicadElementDnp();
 				break;

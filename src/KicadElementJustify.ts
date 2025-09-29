@@ -1,9 +1,28 @@
 import { KicadElement } from './KicadElement';
 
+export type KicadJustifyHorizontal = 'left' | 'middle' | 'right';
+export type KicadJustifyVertical = 'top' | 'middle' | 'bottom';
+
 export class KicadElementJustify extends KicadElement {
-	horizonstal?: string; //'left' | 'middle' | 'right';
-	vertical?: string; //'top' | 'middle' | 'bottom';
+	horizontal?: KicadJustifyHorizontal; //'left' | 'middle' | 'right';
+	vertical?: KicadJustifyVertical; //'top' | 'middle' | 'bottom';
 	mirrored?: boolean;
+
+	setJustify(
+		horizontal?: KicadJustifyHorizontal,
+		vertical?: KicadJustifyVertical,
+		mirrored?: boolean
+	) {
+		if (horizontal !== undefined) {
+			this.horizontal = horizontal;
+		}
+		if (vertical !== undefined) {
+			this.vertical = vertical;
+		}
+		if (mirrored !== undefined) {
+			this.mirrored = mirrored;
+		}
+	}
 
 	override afterParse() {
 		if (this.attributes.length > 3) {
@@ -21,7 +40,7 @@ export class KicadElementJustify extends KicadElement {
 
 		if (this.attributes.length >= 1) {
 			const horiz = this.attributes[0].value as string;
-			this.horizonstal = horiz as 'left' | 'middle' | 'right';
+			this.horizontal = horiz as 'left' | 'middle' | 'right';
 
 		}
 
@@ -34,8 +53,8 @@ export class KicadElementJustify extends KicadElement {
 	}
 
 	override write(): string {
-		const horizontal = this.horizonstal ? ' ' + this.horizonstal : '';
-		const vertical = this.vertical ? ' ' + this.vertical : '';
+		const horizontal = this.horizontal && this.horizontal !== 'middle' ? ' ' + this.horizontal : '';
+		const vertical = this.vertical && this.vertical !== 'middle' ? ' ' + this.vertical : '';
 		const mirror = this.mirrored ? ' mirror' : '';
 		return this.pad() + `(justify${ horizontal }${ vertical }${ mirror })`;
 	}

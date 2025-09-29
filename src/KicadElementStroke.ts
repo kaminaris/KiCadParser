@@ -1,3 +1,4 @@
+import { KicadElementColor } from 'src/app/Lib/Kicad/src/KicadElementColor';
 import { KicadElementType }  from './KicadElementType';
 import { KicadElementWidth } from './KicadElementWidth';
 import { KicadElement }      from './KicadElement';
@@ -17,6 +18,11 @@ export class KicadElementStroke extends KicadElement {
 	setType(type: KicadStrokeType) {
 		let typeAttr = this.findOrCreateChildByClass(KicadElementType);
 		typeAttr.setAttribute({ value: type, format: 'literal' }, 0);
+	}
+
+	setColor(r: number, g: number, b: number, a: number) {
+		const colorAttr = this.findOrCreateChildByClass(KicadElementColor);
+		colorAttr.setColor(r, g, b, a);
 	}
 
 	override afterParse() {

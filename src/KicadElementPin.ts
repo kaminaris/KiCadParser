@@ -4,15 +4,38 @@ import { KicadElementAt }     from './KicadElementAt';
 import { KicadElementLength } from './KicadElementLength';
 import { KicadElementName }   from './KicadElementName';
 
+export type KicadPinElectricalType = 'input'
+	| 'output'
+	| 'bidirectional'
+	| 'tri_state'
+	| 'passive'
+	| 'free'
+	| 'unspecified'
+	| 'power_in'
+	| 'power_out'
+	| 'open_collector'
+	| 'open_emitter'
+	| 'no_connect';
+
+export type KicadPinShape = 'line'
+	| 'inverted'
+	| 'clock'
+	| 'inverted_clock'
+	| 'input_low'
+	| 'clock_low'
+	| 'output_low'
+	| 'edge_clock_high'
+	| 'non_logic';
+
 export class KicadElementPin extends KicadElement {
 	override name = 'pin';
 
-	setType(type: string, shape: string) {
+	setType(electricalType: KicadPinElectricalType, shape: KicadPinShape) {
 		if (this.attributes.length < 1) {
 			this.attributes.push({ format: 'literal', value: '' });
 		}
 
-		this.attributes[0].value = type;
+		this.attributes[0].value = electricalType;
 		this.attributes[0].format = 'literal';
 
 		if (this.attributes.length < 2) {

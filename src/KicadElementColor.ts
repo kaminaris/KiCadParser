@@ -1,12 +1,20 @@
 import { KicadElement } from './KicadElement';
 
 export class KicadElementColor extends KicadElement {
-	red: number = 0;
-	green: number = 0;
-	blue: number = 0;
-	alpha: number = 0;
+	color?: string;
+	red?: number;
+	green?: number;
+	blue?: number;
+	alpha?: number;
 
 	override afterParse() {
+		if (this.attributes.length === 1) {
+			// Handle case where color is given as a single hex string or name, e.g. #RRGGBBAA
+			this.color = (this.attributes[0].value as string).trim();
+			this.attributes.length = 0;
+			return;
+		}
+
 		if (this.attributes.length !== 4) {
 			throw new Error(`KicadElementColor expects exactly four attributes, got ${ this.attributes.length }`);
 		}
@@ -25,7 +33,15 @@ export class KicadElementColor extends KicadElement {
 		this.alpha = a;
 	}
 
+	setColorName(color: string) {
+		this.color = color;
+	}
+
 	override write(): string {
+		if (this.color) {
+			return this.pad() + `(color "${ this.color }")`;
+		}
+
 		return this.pad() + `(color ${ this.red } ${ this.green } ${ this.blue } ${ this.alpha })`;
 	}
 }

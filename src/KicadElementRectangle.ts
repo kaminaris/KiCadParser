@@ -1,4 +1,4 @@
-import { KicadElementFill }                    from './KicadElementFill';
+import { KicadElementFill, KicadFillType } from './KicadElementFill';
 import { KicadElementStroke, KicadStrokeType } from './KicadElementStroke';
 import { KicadElementEnd }                     from './KicadElementEnd';
 import { KicadElementStart }                   from './KicadElementStart';
@@ -33,7 +33,7 @@ export class KicadElementRectangle extends KicadElement {
 		str.setType(type);
 	}
 
-	setFill(type: 'background' | 'solid' | 'none') {
+	setFill(type: KicadFillType) {
 		let fill = this.findOrCreateChildByClass(KicadElementFill);
 		fill.setType(type)
 	}
