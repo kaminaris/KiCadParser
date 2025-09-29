@@ -1,8 +1,8 @@
-import { KicadElementBold }      from 'src/app/Lib/Kicad/src/KicadElementBold';
-import { KicadElementFace }      from 'src/app/Lib/Kicad/src/KicadElementFace';
-import { KicadElementItalic }    from 'src/app/Lib/Kicad/src/KicadElementItalic';
-import { KicadElementSize }      from 'src/app/Lib/Kicad/src/KicadElementSize';
-import { KicadElementThickness } from 'src/app/Lib/Kicad/src/KicadElementThickness';
+import { KicadElementBold }      from './KicadElementBold';
+import { KicadElementFace }      from './KicadElementFace';
+import { KicadElementItalic }    from './KicadElementItalic';
+import { KicadElementSize }      from './KicadElementSize';
+import { KicadElementThickness } from './KicadElementThickness';
 import { KicadElementColor }     from './KicadElementColor';
 import { KicadElement }          from './KicadElement';
 

@@ -1,6 +1,6 @@
 import {
 	KicadElementJustify, KicadJustifyHorizontal, KicadJustifyVertical
-}                           from 'src/app/Lib/Kicad/src/KicadElementJustify';
+}                           from './KicadElementJustify';
 import { KicadElementFont } from './KicadElementFont';
 import { KicadElementHide } from './KicadElementHide';
 import { KicadElement }     from './KicadElement';

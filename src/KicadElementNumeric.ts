@@ -1,6 +1,6 @@
 import { KicadElement } from './KicadElement';
 
-export class KicadElementNumeric extends KicadElement {
+export abstract class KicadElementNumeric extends KicadElement {
 	value: number = 0;
 
 	constructor(v?: number) {

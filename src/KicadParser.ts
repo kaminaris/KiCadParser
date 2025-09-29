@@ -1,6 +1,16 @@
-import { KicadElementBold }             from 'src/app/Lib/Kicad/src/KicadElementBold';
-import { KicadElementFace }             from 'src/app/Lib/Kicad/src/KicadElementFace';
-import { KicadElementItalic }           from 'src/app/Lib/Kicad/src/KicadElementItalic';
+import { KicadElementComment }          from './KicadElementComment';
+import {
+	KicadElementDashedLineDashRatio, KicadElementDashedLineGapRatio, KicadElementHpglPenDiameter
+}                                       from './KicadElementNumericFixed';
+import {
+	KicadElementCompany, KicadElementDate, KicadElementRev, KicadElementTitle
+}                                       from './KicadElementString';
+import {
+	KicadElementTitleBlock
+}                                       from './KicadElementTitleBlock';
+import { KicadElementBold }             from './KicadElementBold';
+import { KicadElementFace }             from './KicadElementFace';
+import { KicadElementItalic }           from './KicadElementItalic';
 import { KicadElementThickness }        from './KicadElementThickness';
 import { KicadElementFill }             from './KicadElementFill';
 import { KicadElementEnd }              from './KicadElementEnd';
@@ -53,8 +63,76 @@ import { KicadElement }                 from './KicadElement';
 export type KicadToken = { type: 'paren' | 'string' | 'number' | 'symbol', value: string };
 
 export class KicadParser {
-	private tokens: KicadToken[] = [];
-	private i: number = 0;
+	tokens: KicadToken[] = [];
+	i: number = 0;
+
+	nodeMap: { [key: string]: any } = {
+		'uuid': KicadElementUUID,
+		'type': KicadElementType,
+		'pts': KicadElementPts,
+		'symbol': KicadElementSymbol,
+		'footprint': KicadElementFootprint,
+		'polygon': KicadElementPolygon,
+		'sheet': KicadElementSheet,
+		'net': KicadElementNet,
+		'lib_symbols': KicadElementLibSymbols,
+		'kicad_symbol_lib': KicadElementSymbolLib,
+		'width': KicadElementWidth,
+		'offset': KicadElementOffset,
+		'size': KicadElementSize,
+		/** Points and coordinates */
+		'start': KicadElementStart,
+		'end': KicadElementEnd,
+		'at': KicadElementAt,
+		'xy': KicadElementXY,
+		'unit': KicadElementUnit,
+		/** numbers */
+		'number': KicadElementNumber,
+		'version': KicadElementVersion,
+		'diameter': KicadElementDiameter,
+		'thickness': KicadElementThickness,
+		'radius': KicadElementRadius,
+		'length': KicadElementLength,
+		'color': KicadElementColor,
+		'data': KicadElementData,
+		/** Fixed precision numbers, not sure if it is intended */
+		'dashed_line_dash_ratio': KicadElementDashedLineDashRatio,
+		'dashed_line_gap_ratio': KicadElementDashedLineGapRatio,
+		'hpglpendiameter': KicadElementHpglPenDiameter,
+
+		/** Strings */
+		'name': KicadElementName,
+		'title': KicadElementTitle,
+		'date': KicadElementDate,
+		'rev': KicadElementRev,
+		'company': KicadElementCompany,
+		'comment': KicadElementComment,
+		'title_block': KicadElementTitleBlock,
+		'face': KicadElementFace,
+		'layer': KicadElementLayer,
+		'generator': KicadElementGenerator,
+		'generator_version': KicadElementGeneratorVersion,
+		'lib_id': KicadElementLibId,
+		'reference': KicadElementReference,
+		'font': KicadElementFont,
+		'effects': KicadElementEffects,
+		'justify': KicadElementJustify,
+		'stroke': KicadElementStroke,
+		'fill': KicadElementFill,
+		'property': KicadElementProperty,
+		/** Booleans and flags */
+		'bold': KicadElementBold,
+		'italic': KicadElementItalic,
+		'dnp': KicadElementDnp,
+		'in_bom': KicadElementInBom,
+		'on_board': KicadElementOnBoard,
+		'exclude_from_sim': KicadElementExcludeFromSim,
+		'fields_autoplaced': KicadElementFieldsAutoplaced,
+		'unlocked': KicadElementUnlocked,
+		'hide': KicadElementHide,
+		'pin': KicadElementPin,
+		'rectangle': KicadElementRectangle
+	};
 
 	tokenizeKicad(text: string): KicadToken[] {
 		const regex = /\(|\)|"((?:\\"|[^"])*)"|[^\s()"]+/g;
@@ -81,164 +159,13 @@ export class KicadParser {
 
 	newElement(name: string): KicadElement {
 		let el: KicadElement;
-		switch (name) {
-			case 'uuid':
-				el = new KicadElementUUID();
-				break;
-			case 'type':
-				el = new KicadElementType();
-				break;
-			case 'pts':
-				el = new KicadElementPts();
-				break;
-			case 'symbol':
-				el = new KicadElementSymbol();
-				break;
-			case 'footprint':
-				el = new KicadElementFootprint();
-				break;
-			case 'polygon':
-				el = new KicadElementPolygon();
-				break;
-			case 'sheet':
-				el = new KicadElementSheet();
-				break;
-			case 'net':
-				el = new KicadElementNet();
-				break;
-			case 'lib_symbols':
-				el = new KicadElementLibSymbols();
-				break;
-			case 'kicad_symbol_lib':
-				el = new KicadElementSymbolLib();
-				break;
-			case 'width':
-				el = new KicadElementWidth();
-				break;
-			case 'offset':
-				el = new KicadElementOffset();
-				break;
-			case 'size':
-				el = new KicadElementSize();
-				break;
-			/** Points and coordinates */
-			case 'start':
-				el = new KicadElementStart();
-				break;
-			case 'end':
-				el = new KicadElementEnd();
-				break;
-			case 'at':
-				el = new KicadElementAt();
-				break;
-			case 'xy':
-				el = new KicadElementXY();
-				break;
-			case 'unit':
-				el = new KicadElementUnit();
-				break;
-			/** numbers */
-			case 'number':
-				el = new KicadElementNumber();
-				break;
-			case 'version':
-				el = new KicadElementVersion();
-				break;
-			case 'diameter':
-				el = new KicadElementDiameter();
-				break;
-			case 'thickness':
-				el = new KicadElementThickness();
-				break;
-			case 'radius':
-				el = new KicadElementRadius();
-				break;
-			case 'length':
-				el = new KicadElementLength();
-				break;
-			case 'color':
-				el = new KicadElementColor();
-				break;
-			case 'data':
-				el = new KicadElementData();
-				break;
-			/** Strings */
-			case 'name':
-				el = new KicadElementName();
-				break;
-			case 'face':
-				el = new KicadElementFace();
-				break;
-			case 'layer':
-				el = new KicadElementLayer();
-				break;
-			case 'generator':
-				el = new KicadElementGenerator();
-				break;
-			case 'generator_version':
-				el = new KicadElementGeneratorVersion();
-				break;
-			case 'lib_id':
-				el = new KicadElementLibId();
-				break;
-			case 'reference':
-				el = new KicadElementReference();
-				break;
-			case 'font':
-				el = new KicadElementFont();
-				break;
-			case 'effects':
-				el = new KicadElementEffects();
-				break;
-			case 'justify':
-				el = new KicadElementJustify();
-				break;
-			case 'stroke':
-				el = new KicadElementStroke();
-				break;
-			case 'fill':
-				el = new KicadElementFill();
-				break;
-			case 'property':
-				el = new KicadElementProperty();
-				break;
-			/** Booleans and flags */
-			case 'bold':
-				el = new KicadElementBold();
-				break;
-			case 'italic':
-				el = new KicadElementItalic();
-				break;
-			case 'dnp':
-				el = new KicadElementDnp();
-				break;
-			case 'in_bom':
-				el = new KicadElementInBom();
-				break;
-			case 'on_board':
-				el = new KicadElementOnBoard();
-				break;
-			case 'exclude_from_sim':
-				el = new KicadElementExcludeFromSim();
-				break;
-			case 'fields_autoplaced':
-				el = new KicadElementFieldsAutoplaced();
-				break;
-			case 'unlocked':
-				el = new KicadElementUnlocked();
-				break;
-			case 'hide':
-				el = new KicadElementHide();
-				break;
-			case 'pin':
-				el = new KicadElementPin();
-				break;
-			case 'rectangle':
-				el = new KicadElementRectangle();
-				break;
-			default:
-				el = new KicadElement();
-				break;
+
+		if (name in this.nodeMap) {
+			const Cls = this.nodeMap[name];
+			el = new Cls();
+		}
+		else {
+			el = new KicadElement();
 		}
 
 		el.name = name;

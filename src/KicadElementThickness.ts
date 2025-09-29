@@ -1,4 +1,4 @@
-import { KicadElementNumeric } from 'src/app/Lib/Kicad/src/KicadElementNumeric';
+import { KicadElementNumeric } from './KicadElementNumeric';
 
 export class KicadElementThickness extends KicadElementNumeric {
 	override name = 'thickness';

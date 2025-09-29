@@ -24,3 +24,19 @@ export class KicadElementString extends KicadElement {
 		return this.pad() + `(${ this.name } "${ this.value }")`;
 	}
 }
+
+export class KicadElementTitle extends KicadElementString {
+	override name = 'title';
+}
+
+export class KicadElementDate extends KicadElementString {
+	override name = 'date';
+}
+
+export class KicadElementRev extends KicadElementString {
+	override name = 'rev';
+}
+
+export class KicadElementCompany extends KicadElementString {
+	override name = 'company';
+}
