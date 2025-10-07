@@ -1,13 +1,16 @@
-import { KicadElementGlobalLabel }      from './KicadElementGlobalLabel';
-import { KicadElementJunction }         from './KicadElementJunction';
-import { KicadElementShape }            from './KicadElementLiteral';
-import { KicadElementNoConnect }        from './KicadElementNoConnect';
-import { KicadElementWire }             from './KicadElementWire';
-import { KicadElementText }             from './KicadElementText';
-import { KicadElementComment }          from './KicadElementComment';
+import { KicadElementArc }         from 'src/app/Lib/Kicad/src/KicadElementArc';
+import { KicadElementPinNumbers }  from 'src/app/Lib/Kicad/src/KicadElementPinNumbers';
+import { KicadElementPolyline }    from './KicadElementPolyline';
+import { KicadElementGlobalLabel } from './KicadElementGlobalLabel';
+import { KicadElementJunction }    from './KicadElementJunction';
+import { KicadElementShape }       from './KicadElementLiteral';
+import { KicadElementNoConnect }   from './KicadElementNoConnect';
+import { KicadElementWire }        from './KicadElementWire';
+import { KicadElementText }        from './KicadElementText';
+import { KicadElementComment }     from './KicadElementComment';
 import {
 	KicadElementDashedLineDashRatio, KicadElementDashedLineGapRatio, KicadElementHpglPenDiameter
-}                                       from './KicadElementNumericFixed';
+}                                  from './KicadElementNumericFixed';
 import {
 	KicadElementCompany, KicadElementDate, KicadElementRev, KicadElementTitle
 }                                       from './KicadElementString';
@@ -62,9 +65,9 @@ import { KicadElementSymbol }           from './KicadElementSymbol';
 import { KicadElementType }             from './KicadElementType';
 import { KicadElementUnit }             from './KicadElementUnit';
 import { KicadElementUUID }             from './KicadElementUUID';
-import { KicadElementWidth }            from './KicadElementWidth';
-import { KicadElementXY }               from './KicadElementXY';
-import { KicadElement }                 from './KicadElement';
+import { KicadElementWidth }               from './KicadElementWidth';
+import { KicadElementMid, KicadElementXY } from './KicadElementXY';
+import { KicadElement }                    from './KicadElement';
 
 export type KicadToken = { type: 'paren' | 'string' | 'number' | 'symbol', value: string };
 
@@ -79,6 +82,8 @@ export class KicadParser {
 		'symbol': KicadElementSymbol,
 		'footprint': KicadElementFootprint,
 		'polygon': KicadElementPolygon,
+		'arc': KicadElementArc,
+		'polyline': KicadElementPolyline,
 		'sheet': KicadElementSheet,
 		'global_label': KicadElementGlobalLabel,
 		'net': KicadElementNet,
@@ -86,12 +91,14 @@ export class KicadParser {
 		'kicad_symbol_lib': KicadElementSymbolLib,
 		'width': KicadElementWidth,
 		'offset': KicadElementOffset,
+		'pin_numbers': KicadElementPinNumbers,
 		'size': KicadElementSize,
 		'wire': KicadElementWire,
 		'junction': KicadElementJunction,
 		'no_connect': KicadElementNoConnect,
 		/** Points and coordinates */
 		'start': KicadElementStart,
+		'mid': KicadElementMid,
 		'end': KicadElementEnd,
 		'at': KicadElementAt,
 		'xy': KicadElementXY,

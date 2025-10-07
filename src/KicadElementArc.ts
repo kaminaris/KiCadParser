@@ -1,17 +1,18 @@
+import { KicadElementMid }                     from 'src/app/Lib/Kicad/src/KicadElementXY';
 import { KicadElementFill, KicadFillType }     from './KicadElementFill';
 import { KicadElementStroke, KicadStrokeType } from './KicadElementStroke';
 import { KicadElementEnd }                     from './KicadElementEnd';
 import { KicadElementStart }                   from './KicadElementStart';
 import { KicadElement }                        from './KicadElement';
 
-export class KicadElementRectangle extends KicadElement {
-	override name = 'rectangle';
-
-	// strokeWidth = 0.254;
+export class KicadElementArc extends KicadElement {
+	override name = 'arc';
 
 	constructor(
 		startX?: number,
 		startY?: number,
+		midX?: number,
+		midY?: number,
 		endX?: number,
 		endY?: number
 	) {
@@ -22,17 +23,28 @@ export class KicadElementRectangle extends KicadElement {
 			this.addChild(s);
 		}
 
+		if (midX !== undefined && midY !== undefined) {
+			const m = new KicadElementMid(midX, midY);
+			this.addChild(m);
+		}
+
 		if (endX !== undefined && endY !== undefined) {
 			const e = new KicadElementEnd(endX, endY);
 			this.addChild(e);
 		}
 	}
 
-	getStartEnd(): { start: { x: number, y: number }, end: { x: number, y: number } } {
+	getStartMidEnd(): {
+		start: { x: number, y: number },
+		mid: { x: number, y: number },
+		end: { x: number, y: number }
+	} {
 		const start = this.findFirstChildByClass(KicadElementStart);
+		const mid = this.findFirstChildByClass(KicadElementMid);
 		const end = this.findFirstChildByClass(KicadElementEnd);
 		return {
 			start: { x: start?.x ?? 0, y: start?.y ?? 0 },
+			mid: { x: mid?.x ?? 0, y: mid?.y ?? 0 },
 			end: { x: end?.x ?? 0, y: end?.y ?? 0 }
 		};
 	}

@@ -16,4 +16,8 @@ export class KicadElementName extends KicadElement {
 		}
 		this.attributes[0].value = value;
 	}
+
+	getValue(): string {
+		return this.attributes[0]?.value as string ?? '';
+	}
 }

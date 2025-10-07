@@ -1,5 +1,9 @@
-import { KicadElement }         from './KicadElement';
-import { KicadElementProperty } from './KicadElementProperty';
+import { KicadElementLength }     from 'src/app/Lib/Kicad/src/KicadElementLength';
+import { KicadElementPinNumbers } from 'src/app/Lib/Kicad/src/KicadElementPinNumbers';
+import { KicadElementAt }         from './KicadElementAt';
+import { KicadElementLibId }      from './KicadElementLibId';
+import { KicadElement }           from './KicadElement';
+import { KicadElementProperty }   from './KicadElementProperty';
 
 export class KicadElementSymbol extends KicadElement {
 	override name = 'symbol';
@@ -12,19 +16,30 @@ export class KicadElementSymbol extends KicadElement {
 		}
 	}
 
+	getLibId(): string | undefined {
+		const libIdProp = this.findFirstChildByClass(KicadElementLibId);
+		return libIdProp?.value ?? undefined;
+	}
+
+	getLayers() {
+		return this.findChildrenByClass(KicadElementSymbol);
+	}
+
+	getOrigin(): { x: number, y: number, rotation: number } {
+		const xy = this.findFirstChildByClass(KicadElementAt);
+		if (!xy) {
+			return { x: 0, y: 0, rotation: 0 };
+		}
+		return { x: xy.x, y: xy.y, rotation: xy.size ?? 0 };
+	}
+
 	setSymbolName(name: string) {
 		this.symbolName = name;
 	}
 
-	getLibraryName(): string | undefined {
-		if (!this.symbolName) {
-			return undefined;
-		}
-		const parts = this.symbolName.split(':');
-		if (parts.length === 2) {
-			return parts[0];
-		}
-		return undefined;
+	arePinNamesHidden(): boolean {
+		const hideChild = this.findFirstChildByClass(KicadElementPinNumbers);
+		return hideChild ? hideChild.isHidden() : false;
 	}
 
 	getAllProperties(): Record<string, string> {
@@ -32,6 +47,19 @@ export class KicadElementSymbol extends KicadElement {
 		for (const child of this.children) {
 			if (child instanceof KicadElementProperty) {
 				props[child.propertyName!] = child.propertyValue!;
+			}
+		}
+		return props;
+	}
+
+	getVisibleProperties(): Record<string, KicadElementProperty> {
+		const props: Record<string, KicadElementProperty> = {};
+		for (const child of this.children) {
+			if (child instanceof KicadElementProperty) {
+				if (child.isHidden()) {
+					continue;
+				}
+				props[child.propertyName!] = child;
 			}
 		}
 		return props;
@@ -164,12 +192,17 @@ export class KicadElementSymbol extends KicadElement {
 	override write(): string {
 		const attrs = this.formatAttributes();
 		let attrStr = this.symbolName !== undefined ? ` "${ this.escapeString(this.symbolName) }"` : '';
-		attrStr +=  (attrs.length > 0 ? ' ' + attrs.join(' ') : '');
+		attrStr += (attrs.length > 0 ? ' ' + attrs.join(' ') : '');
 
 		if (this.children.length === 0) {
 			return this.pad() + `(${ this.name }${ attrStr })`;
 		}
 
 		return this.pad() + `(${ this.name }${ attrStr }\n${ this.writeChildren() }\n${ this.pad() })`;
+	}
+
+	getReference() {
+		const refProp = this.getPropertyByName('Reference');
+		return refProp?.propertyValue ?? '';
 	}
 }

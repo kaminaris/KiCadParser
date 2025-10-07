@@ -5,9 +5,19 @@ export class KicadElementXY extends KicadElement {
 	x: number = 0;
 	y: number = 0;
 
+	constructor(x?: number, y?: number) {
+		super();
+		if (x !== undefined) {
+			this.x = x;
+		}
+		if (y !== undefined) {
+			this.y = y;
+		}
+	}
+
 	override afterParse() {
 		if (this.attributes.length !== 2) {
-			throw new Error(`KicadElementXY expects 2 attributes, got ${ this.attributes.length }`);
+			throw new Error(`${ this.name } expects 2 attributes, got ${ this.attributes.length }`);
 		}
 
 		this.x = parseFloat(this.attributes[0].value as string);
@@ -16,6 +26,10 @@ export class KicadElementXY extends KicadElement {
 	}
 
 	override write(): string {
-		return this.pad() + `(${this.name} ${ this.x } ${ this.y })`;
+		return this.pad() + `(${ this.name } ${ this.x } ${ this.y })`;
 	}
+}
+
+export class KicadElementMid extends KicadElementXY {
+	override name = 'mid';
 }

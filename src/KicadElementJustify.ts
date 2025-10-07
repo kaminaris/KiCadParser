@@ -24,6 +24,14 @@ export class KicadElementJustify extends KicadElement {
 		}
 	}
 
+	getJustify(): { horizontal: KicadJustifyHorizontal, vertical: KicadJustifyVertical, mirrored: boolean } {
+		return {
+			horizontal: this.horizontal || 'middle',
+			vertical: this.vertical || 'middle',
+			mirrored: this.mirrored || false
+		};
+	}
+
 	override afterParse() {
 		if (this.attributes.length > 3) {
 			throw new Error(`KicadElementJustify expects at most 3 attributes, got ${ this.attributes.length }`);
