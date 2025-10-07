@@ -1,6 +1,6 @@
 import { KicadElement } from './KicadElement';
 
-export abstract class KicadElementLiteral extends KicadElement {
+export class KicadElementText extends KicadElement {
 	value: string = '';
 
 	constructor(v?: string) {
@@ -21,10 +21,6 @@ export abstract class KicadElementLiteral extends KicadElement {
 	}
 
 	override write(): string {
-		return this.pad() + `(${ this.name } ${ this.value })`;
+		return this.pad() + `(${ this.name } "${ this.value }"\n${ this.writeChildren() }\n${ this.pad() })`;
 	}
-}
-
-export class KicadElementShape extends KicadElementLiteral {
-	override name = 'shape';
 }

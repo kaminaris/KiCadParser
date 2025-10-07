@@ -1,3 +1,9 @@
+import { KicadElementGlobalLabel }      from './KicadElementGlobalLabel';
+import { KicadElementJunction }         from './KicadElementJunction';
+import { KicadElementShape }            from './KicadElementLiteral';
+import { KicadElementNoConnect }        from './KicadElementNoConnect';
+import { KicadElementWire }             from './KicadElementWire';
+import { KicadElementText }             from './KicadElementText';
 import { KicadElementComment }          from './KicadElementComment';
 import {
 	KicadElementDashedLineDashRatio, KicadElementDashedLineGapRatio, KicadElementHpglPenDiameter
@@ -74,12 +80,16 @@ export class KicadParser {
 		'footprint': KicadElementFootprint,
 		'polygon': KicadElementPolygon,
 		'sheet': KicadElementSheet,
+		'global_label': KicadElementGlobalLabel,
 		'net': KicadElementNet,
 		'lib_symbols': KicadElementLibSymbols,
 		'kicad_symbol_lib': KicadElementSymbolLib,
 		'width': KicadElementWidth,
 		'offset': KicadElementOffset,
 		'size': KicadElementSize,
+		'wire': KicadElementWire,
+		'junction': KicadElementJunction,
+		'no_connect': KicadElementNoConnect,
 		/** Points and coordinates */
 		'start': KicadElementStart,
 		'end': KicadElementEnd,
@@ -105,6 +115,8 @@ export class KicadParser {
 		'title': KicadElementTitle,
 		'date': KicadElementDate,
 		'rev': KicadElementRev,
+		'text': KicadElementText,
+		'shape': KicadElementShape,
 		'company': KicadElementCompany,
 		'comment': KicadElementComment,
 		'title_block': KicadElementTitleBlock,

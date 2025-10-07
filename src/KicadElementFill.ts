@@ -10,4 +10,9 @@ export class KicadElementFill extends KicadElement {
 		const t = this.findOrCreateChildByClass(KicadElementType);
 		t.setAttribute({ value, format: 'literal' }, 0);
 	}
+
+	getType(): KicadFillType {
+		const t = this.findFirstChildByClass(KicadElementType);
+		return (t?.attributes[0]?.value ?? 'none') as KicadFillType;
+	}
 }

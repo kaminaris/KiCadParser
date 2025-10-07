@@ -5,7 +5,7 @@ export class KicadElementAt extends KicadElement {
 	y = 0;
 	size?: number;
 
-	constructor(x?: number, y?: number, size?: number) {
+	constructor(x?: number, y?: number, rotation?: number) {
 		super();
 		if (x) {
 			this.x = x;
@@ -13,8 +13,8 @@ export class KicadElementAt extends KicadElement {
 		if (y) {
 			this.y = y;
 		}
-		if (size) {
-			this.size = size;
+		if (rotation) {
+			this.size = rotation;
 		}
 	}
 
