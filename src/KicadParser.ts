@@ -1,5 +1,5 @@
-import { KicadElementArc }         from 'src/app/Lib/Kicad/src/KicadElementArc';
-import { KicadElementPinNumbers }  from 'src/app/Lib/Kicad/src/KicadElementPinNumbers';
+import { KicadElementArc }         from './KicadElementArc';
+import { KicadElementPinNumbers }  from './KicadElementPinNumbers';
 import { KicadElementPolyline }    from './KicadElementPolyline';
 import { KicadElementGlobalLabel } from './KicadElementGlobalLabel';
 import { KicadElementJunction }    from './KicadElementJunction';

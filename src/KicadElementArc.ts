@@ -1,4 +1,4 @@
-import { KicadElementMid }                     from 'src/app/Lib/Kicad/src/KicadElementXY';
+import { KicadElementMid }                     from './KicadElementXY';
 import { KicadElementFill, KicadFillType }     from './KicadElementFill';
 import { KicadElementStroke, KicadStrokeType } from './KicadElementStroke';
 import { KicadElementEnd }                     from './KicadElementEnd';

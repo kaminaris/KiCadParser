@@ -1,6 +1,4 @@
-import { KicadElementStroke, KicadStrokeType } from 'src/app/Lib/Kicad/src/KicadElementStroke';
-import { KicadElementType }                    from 'src/app/Lib/Kicad/src/KicadElementType';
-import { KicadElementWidth }                   from 'src/app/Lib/Kicad/src/KicadElementWidth';
+import { KicadElementStroke, KicadStrokeType } from './KicadElementStroke';
 import { KicadElementPts }                     from './KicadElementPts';
 import { KicadElementXY }                      from './KicadElementXY';
 import { KicadElement }                        from './KicadElement';

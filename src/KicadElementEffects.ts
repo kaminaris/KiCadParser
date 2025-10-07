@@ -43,6 +43,42 @@ export class KicadElementEffects extends KicadElement {
 		return justifyEl.getJustify();
 	}
 
+	getAnchorPoint(): { x: number, y: number } {
+		const justify = this.getJustify();
+		let x = 0;
+		let y = 0;
+
+		switch (justify.horizontal) {
+			case 'left':
+				x = 0;
+				break;
+			case 'middle':
+				x = 0.5;
+				break;
+			case 'right':
+				x = 1;
+				break;
+		}
+
+		switch (justify.vertical) {
+			case 'top':
+				y = 0;
+				break;
+			case 'middle':
+				y = 0.5;
+				break;
+			case 'bottom':
+				y = 1;
+				break;
+		}
+
+		if (justify.mirrored) {
+			x = 1 - x;
+		}
+
+		return { x, y };
+	}
+
 	getOrCreateFont(): KicadElementFont {
 		let found = this.findFirstChildByClass(KicadElementFont);
 		if (!found) {

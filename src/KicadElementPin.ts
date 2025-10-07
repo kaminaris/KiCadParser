@@ -1,5 +1,4 @@
-import { KicadElementHide }   from 'src/app/Lib/Kicad/src/KicadElementHide';
-import { KicadElementPinNumbers } from 'src/app/Lib/Kicad/src/KicadElementPinNumbers';
+import { KicadElementHide }   from './KicadElementHide';
 import { KicadElementNumber } from './KicadElementNumber';
 import { KicadElement }       from './KicadElement';
 import { KicadElementAt }     from './KicadElementAt';

@@ -1,5 +1,4 @@
-import { KicadElementLength }     from 'src/app/Lib/Kicad/src/KicadElementLength';
-import { KicadElementPinNumbers } from 'src/app/Lib/Kicad/src/KicadElementPinNumbers';
+import { KicadElementPinNumbers } from './KicadElementPinNumbers';
 import { KicadElementAt }         from './KicadElementAt';
 import { KicadElementLibId }      from './KicadElementLibId';
 import { KicadElement }           from './KicadElement';

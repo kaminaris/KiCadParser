@@ -1,5 +1,4 @@
-import { KicadElementFont }                             from 'src/app/Lib/Kicad/src/KicadElementFont';
-import { KicadJustifyHorizontal, KicadJustifyVertical } from 'src/app/Lib/Kicad/src/KicadElementJustify';
+import { KicadJustifyHorizontal, KicadJustifyVertical } from './KicadElementJustify';
 import { KicadElementEffects }                          from './KicadElementEffects';
 import { KicadElementAt }                               from './KicadElementAt';
 import { KicadElementLayer }                            from './KicadElementLayer';

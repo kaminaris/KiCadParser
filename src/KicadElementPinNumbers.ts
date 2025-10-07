@@ -1,4 +1,4 @@
-import { KicadElementHide } from 'src/app/Lib/Kicad/src/KicadElementHide';
+import { KicadElementHide } from './KicadElementHide';
 import { KicadElement }     from './KicadElement';
 
 export class KicadElementPinNumbers extends KicadElement {
