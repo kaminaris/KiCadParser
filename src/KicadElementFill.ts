@@ -1,4 +1,4 @@
-import { KicadElementColor } from 'src/app/Lib/Kicad/src/KicadElementColor';
+import { KicadElementColor } from './KicadElementColor';
 import { KicadElementType }  from './KicadElementType';
 import { KicadElement }      from './KicadElement';
 

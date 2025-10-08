@@ -1,4 +1,4 @@
-import { KicadElementCircle } from 'src/app/Lib/Kicad/src/KicadElementCircle';
+import { KicadElementCircle } from './KicadElementCircle';
 import {
 	KicadElementBold, KicadElementDnp, KicadElementExcludeFromSim, KicadElementFieldsAutoplaced, KicadElementHide,
 	KicadElementInBom, KicadElementItalic, KicadElementOnBoard, KicadElementUnlocked
