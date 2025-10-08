@@ -1,3 +1,4 @@
+import { KicadElementUnit }       from 'src/app/Lib/Kicad/src/KicadElementNumeric';
 import { KicadElementLibId }      from './KicadElementString';
 import { KicadElementPinNumbers } from './KicadElementPinNumbers';
 import { KicadElementAt }         from './KicadElementAt';
@@ -34,6 +35,28 @@ export class KicadElementSymbol extends KicadElement {
 
 	setSymbolName(name: string) {
 		this.symbolName = name;
+	}
+
+	deconstructSymbolName(): { libName: string, unit: number, deMorgan: number } {
+		const parts = this.symbolName?.split('_') ?? [];
+		if (parts.length < 3) {
+			return { libName: this.symbolName ?? '', unit: 1, deMorgan: 0 };
+		}
+
+		// For multi-part names like "74LS00", rejoin all parts except last 2
+		const unit = +parts[parts.length - 2];
+		const deMorgan = +parts[parts.length - 1];
+		const libName = parts.slice(0, -2).join('_');
+
+		// Validate and provide defaults
+		const validUnit = isNaN(unit) ? 1 : unit;
+		const validDeMorgan = isNaN(deMorgan) ? 0 : deMorgan;
+
+		return {
+			libName: libName ?? this.symbolName ?? '',
+			unit: validUnit,
+			deMorgan: validDeMorgan
+		};
 	}
 
 	arePinNamesHidden(): boolean {
@@ -203,5 +226,10 @@ export class KicadElementSymbol extends KicadElement {
 	getReference() {
 		const refProp = this.getPropertyByName('Reference');
 		return refProp?.propertyValue ?? '';
+	}
+
+	getUnitId() {
+		const unit = this.findFirstChildByClass(KicadElementUnit);
+		return unit?.value ?? 0;
 	}
 }
