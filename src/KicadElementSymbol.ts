@@ -1,6 +1,6 @@
+import { KicadElementLibId }      from './KicadElementString';
 import { KicadElementPinNumbers } from './KicadElementPinNumbers';
 import { KicadElementAt }         from './KicadElementAt';
-import { KicadElementLibId }      from './KicadElementLibId';
 import { KicadElement }           from './KicadElement';
 import { KicadElementProperty }   from './KicadElementProperty';
 
@@ -29,7 +29,7 @@ export class KicadElementSymbol extends KicadElement {
 		if (!xy) {
 			return { x: 0, y: 0, rotation: 0 };
 		}
-		return { x: xy.x, y: xy.y, rotation: xy.size ?? 0 };
+		return { x: xy.x, y: xy.y, rotation: xy.rotation ?? 0 };
 	}
 
 	setSymbolName(name: string) {

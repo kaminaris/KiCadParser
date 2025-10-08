@@ -1,6 +1,6 @@
+import { KicadElementWidth } from './KicadElementNumeric';
 import { KicadElementColor } from './KicadElementColor';
 import { KicadElementType }  from './KicadElementType';
-import { KicadElementWidth } from './KicadElementWidth';
 import { KicadElement }      from './KicadElement';
 
 export type KicadStrokeType = 'default' | 'solid' | 'dash' | 'dot' | 'dash_dot' | 'dash_dot_dot';

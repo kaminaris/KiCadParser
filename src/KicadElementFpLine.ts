@@ -24,7 +24,7 @@ export class KicadElementFpLine extends KicadElement {
 	override write(): string {
 		return `
 (
-    ${this.name}
+    ${ this.name }
     (start ${ this.startX } ${ this.startY })
     (end ${ this.endX } ${ this.endY })
     ${ this.stroke.write() }

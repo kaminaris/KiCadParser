@@ -1,3 +1,24 @@
+import {
+	KicadElementBold, KicadElementDnp, KicadElementExcludeFromSim, KicadElementFieldsAutoplaced, KicadElementHide,
+	KicadElementInBom, KicadElementItalic, KicadElementOnBoard, KicadElementUnlocked
+} from './KicadElementBoolean';
+import {
+	KicadElementDiameter, KicadElementLength, KicadElementRadius, KicadElementThickness, KicadElementUnit,
+	KicadElementVersion,
+	KicadElementWidth
+} from './KicadElementNumeric';
+import {
+	KicadElementDashedLineDashRatio, KicadElementDashedLineGapRatio, KicadElementHpglPenDiameter
+} from './KicadElementNumericFixed';
+import {
+	KicadElementCompany, KicadElementDate, KicadElementFace, KicadElementGenerator, KicadElementGeneratorVersion,
+	KicadElementLibId, KicadElementReference,
+	KicadElementRev, KicadElementTitle
+} from './KicadElementString';
+import {
+	KicadElementEnd, KicadElementMid, KicadElementStart, KicadElementXY
+} from './KicadElementXY';
+
 import { KicadElementArc }         from './KicadElementArc';
 import { KicadElementPinNumbers }  from './KicadElementPinNumbers';
 import { KicadElementPolyline }    from './KicadElementPolyline';
@@ -8,66 +29,34 @@ import { KicadElementNoConnect }   from './KicadElementNoConnect';
 import { KicadElementWire }        from './KicadElementWire';
 import { KicadElementText }        from './KicadElementText';
 import { KicadElementComment }     from './KicadElementComment';
-import {
-	KicadElementDashedLineDashRatio, KicadElementDashedLineGapRatio, KicadElementHpglPenDiameter
-}                                  from './KicadElementNumericFixed';
-import {
-	KicadElementCompany, KicadElementDate, KicadElementRev, KicadElementTitle
-}                                       from './KicadElementString';
-import {
-	KicadElementTitleBlock
-}                                       from './KicadElementTitleBlock';
-import { KicadElementBold }             from './KicadElementBold';
-import { KicadElementFace }             from './KicadElementFace';
-import { KicadElementItalic }           from './KicadElementItalic';
-import { KicadElementThickness }        from './KicadElementThickness';
-import { KicadElementFill }             from './KicadElementFill';
-import { KicadElementEnd }              from './KicadElementEnd';
-import { KicadElementFootprint }        from './KicadElementFootprint';
-import { KicadElementGenerator }        from './KicadElementGenerator';
-import { KicadElementGeneratorVersion } from './KicadElementGeneratorVersion';
-import { KicadElementLayer }            from './KicadElementLayer';
-import { KicadElementName }             from './KicadElementName';
-import { KicadElementNet }              from './KicadElementNet';
-import { KicadElementNumber }           from './KicadElementNumber';
-import { KicadElementPolygon }          from './KicadElementPolygon';
-import { KicadElementRectangle }        from './KicadElementRectangle';
-import { KicadElementStart }            from './KicadElementStart';
-import { KicadElementSymbolLib }        from './KicadElementSymbolLib';
-import { KicadElementUnlocked }         from './KicadElementUnlocked';
-import { KicadElementVersion }          from './KicadElementVersion';
-import { KicadElementAt }               from './KicadElementAt';
-import { KicadElementColor }            from './KicadElementColor';
-import { KicadElementData }             from './KicadElementData';
-import { KicadElementDiameter }         from './KicadElementDiameter';
-import { KicadElementDnp }              from './KicadElementDnp';
-import { KicadElementEffects }          from './KicadElementEffects';
-import { KicadElementFieldsAutoplaced } from './KicadElementFieldsAutoplaced';
-import { KicadElementFont }             from './KicadElementFont';
-import { KicadElementHide }             from './KicadElementHide';
-import { KicadElementInBom }            from './KicadElementInBom';
-import { KicadElementExcludeFromSim }   from './KicadElementExcludeFromSim';
-import { KicadElementJustify }          from './KicadElementJustify';
-import { KicadElementLength }           from './KicadElementLength';
-import { KicadElementLibId }            from './KicadElementLibId';
-import { KicadElementLibSymbols }       from './KicadElementLibSymbols';
-import { KicadElementOffset }           from './KicadElementOffset';
-import { KicadElementOnBoard }          from './KicadElementOnBoard';
-import { KicadElementPin }              from './KicadElementPin';
-import { KicadElementProperty }         from './KicadElementProperty';
-import { KicadElementPts }              from './KicadElementPts';
-import { KicadElementRadius }           from './KicadElementRadius';
-import { KicadElementReference }        from './KicadElementReference';
-import { KicadElementSheet }            from './KicadElementSheet';
-import { KicadElementSize }             from './KicadElementSize';
-import { KicadElementStroke }           from './KicadElementStroke';
-import { KicadElementSymbol }           from './KicadElementSymbol';
-import { KicadElementType }             from './KicadElementType';
-import { KicadElementUnit }             from './KicadElementUnit';
-import { KicadElementUUID }             from './KicadElementUUID';
-import { KicadElementWidth }               from './KicadElementWidth';
-import { KicadElementMid, KicadElementXY } from './KicadElementXY';
-import { KicadElement }                    from './KicadElement';
+import { KicadElementTitleBlock }  from './KicadElementTitleBlock';
+import { KicadElementFill }        from './KicadElementFill';
+import { KicadElementFootprint }   from './KicadElementFootprint';
+import { KicadElementLayer }       from './KicadElementLayer';
+import { KicadElementName }        from './KicadElementName';
+import { KicadElementNet }         from './KicadElementNet';
+import { KicadElementNumber }      from './KicadElementNumber';
+import { KicadElementPolygon }     from './KicadElementPolygon';
+import { KicadElementRectangle }   from './KicadElementRectangle';
+import { KicadElementSymbolLib }   from './KicadElementSymbolLib';
+import { KicadElementAt }          from './KicadElementAt';
+import { KicadElementColor }       from './KicadElementColor';
+import { KicadElementData }        from './KicadElementData';
+import { KicadElementEffects }     from './KicadElementEffects';
+import { KicadElementFont }        from './KicadElementFont';
+import { KicadElementJustify }     from './KicadElementJustify';
+import { KicadElementLibSymbols }  from './KicadElementLibSymbols';
+import { KicadElementOffset }      from './KicadElementOffset';
+import { KicadElementPin }         from './KicadElementPin';
+import { KicadElementProperty }    from './KicadElementProperty';
+import { KicadElementPts }         from './KicadElementPts';
+import { KicadElementSheet }       from './KicadElementSheet';
+import { KicadElementSize }        from './KicadElementSize';
+import { KicadElementStroke }      from './KicadElementStroke';
+import { KicadElementSymbol }      from './KicadElementSymbol';
+import { KicadElementType }        from './KicadElementType';
+import { KicadElementUUID }        from './KicadElementUUID';
+import { KicadElement }            from './KicadElement';
 
 export type KicadToken = { type: 'paren' | 'string' | 'number' | 'symbol', value: string };
 

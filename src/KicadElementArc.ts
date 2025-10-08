@@ -1,11 +1,16 @@
-import { KicadElementMid }                     from './KicadElementXY';
-import { KicadElementFill, KicadFillType }     from './KicadElementFill';
-import { KicadElementStroke, KicadStrokeType } from './KicadElementStroke';
-import { KicadElementEnd }                     from './KicadElementEnd';
-import { KicadElementStart }                   from './KicadElementStart';
-import { KicadElement }                        from './KicadElement';
+import { KicadElementShapeBase }                               from './KicadElementShapeBase';
+import { KicadElementEnd, KicadElementMid, KicadElementStart } from './KicadElementXY';
 
-export class KicadElementArc extends KicadElement {
+/**
+ * (arc
+ * 	(start -2.032 -1.27)
+ * 	(mid 0 -0.5572)
+ * 	(end 2.032 -1.27)
+ * 	(stroke (width 0.508) (type default))
+ * 	(fill (type none))
+ * )
+ */
+export class KicadElementArc extends KicadElementShapeBase {
 	override name = 'arc';
 
 	constructor(
@@ -47,29 +52,5 @@ export class KicadElementArc extends KicadElement {
 			mid: { x: mid?.x ?? 0, y: mid?.y ?? 0 },
 			end: { x: end?.x ?? 0, y: end?.y ?? 0 }
 		};
-	}
-
-	setStroke(width: number, type: KicadStrokeType = 'default') {
-		const str = this.findOrCreateChildByClass(KicadElementStroke);
-		str.setWidth(width);
-		str.setType(type);
-	}
-
-	getStroke(): { width: number, type: KicadStrokeType } {
-		const str = this.findFirstChildByClass(KicadElementStroke);
-		if (!str) {
-			return { width: 0.2, type: 'default' }; // Default stroke
-		}
-		return { width: str.getWidth(), type: str.getType() };
-	}
-
-	setFill(type: KicadFillType) {
-		let fill = this.findOrCreateChildByClass(KicadElementFill);
-		fill.setType(type);
-	}
-
-	getFill(): KicadFillType {
-		const fill = this.findFirstChildByClass(KicadElementFill);
-		return fill?.getType() ?? 'none';
 	}
 }

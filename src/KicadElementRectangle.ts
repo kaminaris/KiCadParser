@@ -1,7 +1,6 @@
+import { KicadElementEnd, KicadElementStart }  from './KicadElementXY';
 import { KicadElementFill, KicadFillType }     from './KicadElementFill';
 import { KicadElementStroke, KicadStrokeType } from './KicadElementStroke';
-import { KicadElementEnd }                     from './KicadElementEnd';
-import { KicadElementStart }                   from './KicadElementStart';
 import { KicadElement }                        from './KicadElement';
 
 export class KicadElementRectangle extends KicadElement {

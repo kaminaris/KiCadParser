@@ -33,11 +33,11 @@ export class KicadElementFpCircle extends KicadElement {
 	override write(): string {
 		return `
 (
-    ${this.name}
+    ${ this.name }
     (center ${ this.centerX } ${ this.centerY })
     (end ${ this.centerX } ${ this.centerY! + this.radius! })
     ${ this.stroke.write() }
-    (fill ${this.fill ? 'solid' : 'none'})
+    (fill ${ this.fill ? 'solid' : 'none' })
     (layer "${ this.layer }")
     ${ this.uuid.write() }
 )

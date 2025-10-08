@@ -40,3 +40,23 @@ export class KicadElementRev extends KicadElementString {
 export class KicadElementCompany extends KicadElementString {
 	override name = 'company';
 }
+
+export class KicadElementFace extends KicadElementString {
+	override name = 'face';
+}
+
+export class KicadElementGenerator extends KicadElementString {
+	override name = 'generator';
+}
+
+export class KicadElementGeneratorVersion extends KicadElementString {
+	override name = 'generator_version';
+}
+
+export class KicadElementLibId extends KicadElementString {
+	override name = 'lib_id';
+}
+
+export class KicadElementReference extends KicadElementString {
+	override name = 'reference';
+}

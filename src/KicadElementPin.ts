@@ -1,8 +1,8 @@
-import { KicadElementHide }   from './KicadElementHide';
+import { KicadElementHide }   from './KicadElementBoolean';
+import { KicadElementLength } from './KicadElementNumeric';
 import { KicadElementNumber } from './KicadElementNumber';
 import { KicadElement }       from './KicadElement';
 import { KicadElementAt }     from './KicadElementAt';
-import { KicadElementLength } from './KicadElementLength';
 import { KicadElementName }   from './KicadElementName';
 
 export type KicadPinElectricalType = 'input'
@@ -101,7 +101,7 @@ export class KicadElementPin extends KicadElement {
 		found.y = y;
 
 		if (size !== undefined) {
-			found.size = size;
+			found.rotation = size;
 		}
 	}
 
@@ -110,7 +110,7 @@ export class KicadElementPin extends KicadElement {
 		if (!xy) {
 			return { x: 0, y: 0, rotation: 0 };
 		}
-		return { x: xy.x, y: xy.y, rotation: xy.size ?? 0 };
+		return { x: xy.x, y: xy.y, rotation: xy.rotation ?? 0 };
 	}
 
 	isHidden() {

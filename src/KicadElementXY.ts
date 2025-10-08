@@ -30,6 +30,18 @@ export class KicadElementXY extends KicadElement {
 	}
 }
 
+export class KicadElementStart extends KicadElementXY {
+	override name = 'start';
+}
+
+export class KicadElementEnd extends KicadElementXY {
+	override name = 'end';
+}
+
 export class KicadElementMid extends KicadElementXY {
 	override name = 'mid';
+}
+
+export class KicadElementCenter extends KicadElementXY {
+	override name = 'center';
 }

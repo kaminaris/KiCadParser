@@ -1,7 +1,6 @@
-import { KicadElementGenerator }        from './KicadElementGenerator';
-import { KicadElementGeneratorVersion } from './KicadElementGeneratorVersion';
-import { KicadElementVersion }          from './KicadElementVersion';
-import { KicadElement }                 from './KicadElement';
+import { KicadElementGenerator, KicadElementGeneratorVersion } from './KicadElementString';
+import { KicadElementVersion }                                 from './KicadElementNumeric';
+import { KicadElement }                                        from './KicadElement';
 
 export class KicadElementSymbolLib extends KicadElement {
 	override name = 'kicad_symbol_lib';

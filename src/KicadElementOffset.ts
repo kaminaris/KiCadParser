@@ -16,7 +16,9 @@ export class KicadElementOffset extends KicadElement {
 			return;
 		}
 
-		throw new Error(`KicadElementOffset expects exactly one attribute or children, got ${this.attributes.length} attributes and ${this.children.length} children`);
+		throw new Error(
+			`KicadElementOffset expects exactly one attribute or children, got ${ this.attributes.length } attributes and ${ this.children.length } children`
+		);
 	}
 
 	override write(): string {

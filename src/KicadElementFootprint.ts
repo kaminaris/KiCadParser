@@ -2,11 +2,6 @@ import { KicadElement }         from './KicadElement';
 import { KicadElementProperty } from './KicadElementProperty';
 
 export class KicadElementFootprint extends KicadElement {
-	// footprintName = '';
-	// description = '';
-	// layer = 'F.Cu';
-	// properties: KicadElementProperty[] = [];
-	// pads: KicadElementPad[] = [];
 
 	addBaselineProperties() {
 		/**
@@ -43,7 +38,6 @@ export class KicadElementFootprint extends KicadElement {
 		// const valueProp = new KicadElementProperty('Value', 'FootprintValue', 1, 0);
 		// valueProp.effects.setFont(1, 1, 0.15);
 		// valueProp.layer = 'F.Fab';
-
 
 		/**
 		 *   (
@@ -105,30 +99,4 @@ export class KicadElementFootprint extends KicadElement {
 		// this.properties.push(datasheetProp);
 		// this.properties.push(descriptionProp);
 	}
-
-// 	override write(): string {
-// 		return `
-// (
-// 	footprint
-// 	"${ this.footprintName }"
-// 	(version 20240108)
-// 	(generator "pcbnew")
-// 	(generator_version "8.0")
-// 	(layer "${ this.layer }")
-// 	(descr "${ this.description }")
-//     (attr smd)
-// 	${ this.writeProperties() }
-// 	${ this.writeChildren() }
-// 	${ this.writePads() }
-// )
-// 		`;
-// 	}
-//
-// 	writeProperties() {
-// 		return this.properties.map(p => p.write()).join(' ');
-// 	}
-//
-// 	writePads() {
-// 		return this.pads.map(p => p.write()).join(' ');
-// 	}
 }

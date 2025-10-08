@@ -12,7 +12,7 @@ export abstract class KicadElementNumeric extends KicadElement {
 
 	override afterParse() {
 		if (this.attributes.length !== 1) {
-			throw new Error(`KicadElementNumber expects exactly one attribute, got ${ this.attributes.length }`);
+			throw new Error(`${ this.name } expects exactly one attribute, got ${ this.attributes.length }`);
 		}
 
 		this.value = this.attributes[0].value as number;
@@ -22,4 +22,32 @@ export abstract class KicadElementNumeric extends KicadElement {
 	override write(): string {
 		return this.pad() + `(${ this.name } ${ this.value })`;
 	}
+}
+
+export class KicadElementWidth extends KicadElementNumeric {
+	override name = 'width';
+}
+
+export class KicadElementDiameter extends KicadElementNumeric {
+	override name = 'diameter';
+}
+
+export class KicadElementRadius extends KicadElementNumeric {
+	override name = 'radius';
+}
+
+export class KicadElementThickness extends KicadElementNumeric {
+	override name = 'thickness';
+}
+
+export class KicadElementVersion extends KicadElementNumeric {
+	override name = 'version';
+}
+
+export class KicadElementUnit extends KicadElementNumeric {
+	override name = 'unit';
+}
+
+export class KicadElementLength extends KicadElementNumeric {
+	override name = 'length';
 }

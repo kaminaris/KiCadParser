@@ -1,8 +1,8 @@
+import { KicadElementUnlocked }                         from './KicadElementBoolean';
 import { KicadJustifyHorizontal, KicadJustifyVertical } from './KicadElementJustify';
 import { KicadElementEffects }                          from './KicadElementEffects';
 import { KicadElementAt }                               from './KicadElementAt';
 import { KicadElementLayer }                            from './KicadElementLayer';
-import { KicadElementUnlocked }                         from './KicadElementUnlocked';
 import { KicadElementUUID }                             from './KicadElementUUID';
 import { KicadElement, KicadLayer }                     from './KicadElement';
 
@@ -32,7 +32,7 @@ export class KicadElementProperty extends KicadElement {
 		found.y = y;
 
 		if (rotation !== undefined) {
-			found.size = rotation;
+			found.rotation = rotation;
 		}
 	}
 
@@ -42,7 +42,7 @@ export class KicadElementProperty extends KicadElement {
 			return { x: 0, y: 0, rotation: 0 };
 		}
 
-		return { x: at.x, y: at.y, rotation: at.size ?? 0 };
+		return { x: at.x, y: at.y, rotation: at.rotation ?? 0 };
 	}
 
 	setUnlocked(unlocked: boolean) {

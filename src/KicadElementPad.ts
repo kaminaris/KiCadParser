@@ -33,7 +33,8 @@ export class KicadElementPad extends KicadElement {
 			return '';
 		}
 
-		return this.drillX === this.drillY ? `(drill ${ this.drillX })` : `(drill oval ${ this.drillX } ${ this.drillY })`;
+		return this.drillX === this.drillY ? `(drill ${ this.drillX })` :
+			   `(drill oval ${ this.drillX } ${ this.drillY })`;
 	}
 
 	override write(): string {

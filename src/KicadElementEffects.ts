@@ -1,10 +1,18 @@
 import {
 	KicadElementJustify, KicadJustifyHorizontal, KicadJustifyVertical
-}                           from './KicadElementJustify';
+} from './KicadElementJustify';
+
+import { KicadElementHide } from './KicadElementBoolean';
 import { KicadElementFont } from './KicadElementFont';
-import { KicadElementHide } from './KicadElementHide';
 import { KicadElement }     from './KicadElement';
 
+/**
+ * (effects
+ * 	(font (size 1.27 1.27))
+ * 	(hide yes)
+ * 	(justify left)
+ * )
+ */
 export class KicadElementEffects extends KicadElement {
 	override name = 'effects';
 

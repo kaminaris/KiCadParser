@@ -3,6 +3,9 @@ import { KicadElement }     from './KicadElement';
 
 export type KicadFillType = 'none' | 'outline' | 'background';
 
+/**
+ * (fill (type none))
+ */
 export class KicadElementFill extends KicadElement {
 	override name = 'fill';
 
