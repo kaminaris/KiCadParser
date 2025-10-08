@@ -21,9 +21,9 @@ import {
 }                             from './KicadElementXY';
 
 import { KicadElementArc }         from './KicadElementArc';
-import { KicadElementPinNumbers }  from './KicadElementPinNumbers';
-import { KicadElementPolyline }    from './KicadElementPolyline';
-import { KicadElementGlobalLabel } from './KicadElementGlobalLabel';
+import { KicadElementPinNumbers }                   from './KicadElementPinNumbers';
+import { KicadElementBezier, KicadElementPolyline } from './KicadElementPolyline';
+import { KicadElementGlobalLabel }                  from './KicadElementGlobalLabel';
 import { KicadElementJunction }    from './KicadElementJunction';
 import { KicadElementShape }       from './KicadElementLiteral';
 import { KicadElementNoConnect }   from './KicadElementNoConnect';
@@ -86,6 +86,7 @@ export class KicadParser {
 		/** Shapes */
 		'arc': KicadElementArc,
 		'polyline': KicadElementPolyline,
+		'bezier': KicadElementBezier,
 		'polygon': KicadElementPolygon,
 		'circle': KicadElementCircle,
 		'rectangle': KicadElementRectangle,
