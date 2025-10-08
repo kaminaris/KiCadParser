@@ -1,23 +1,24 @@
+import { KicadElementCircle } from 'src/app/Lib/Kicad/src/KicadElementCircle';
 import {
 	KicadElementBold, KicadElementDnp, KicadElementExcludeFromSim, KicadElementFieldsAutoplaced, KicadElementHide,
 	KicadElementInBom, KicadElementItalic, KicadElementOnBoard, KicadElementUnlocked
-} from './KicadElementBoolean';
+}                             from './KicadElementBoolean';
 import {
 	KicadElementDiameter, KicadElementLength, KicadElementRadius, KicadElementThickness, KicadElementUnit,
 	KicadElementVersion,
 	KicadElementWidth
-} from './KicadElementNumeric';
+}                             from './KicadElementNumeric';
 import {
 	KicadElementDashedLineDashRatio, KicadElementDashedLineGapRatio, KicadElementHpglPenDiameter
-} from './KicadElementNumericFixed';
+}                             from './KicadElementNumericFixed';
 import {
 	KicadElementCompany, KicadElementDate, KicadElementFace, KicadElementGenerator, KicadElementGeneratorVersion,
 	KicadElementLibId, KicadElementReference,
 	KicadElementRev, KicadElementTitle
-} from './KicadElementString';
+}                             from './KicadElementString';
 import {
-	KicadElementEnd, KicadElementMid, KicadElementStart, KicadElementXY
-} from './KicadElementXY';
+	KicadElementCenter, KicadElementEnd, KicadElementMid, KicadElementStart, KicadElementXY
+}                             from './KicadElementXY';
 
 import { KicadElementArc }         from './KicadElementArc';
 import { KicadElementPinNumbers }  from './KicadElementPinNumbers';
@@ -70,9 +71,6 @@ export class KicadParser {
 		'pts': KicadElementPts,
 		'symbol': KicadElementSymbol,
 		'footprint': KicadElementFootprint,
-		'polygon': KicadElementPolygon,
-		'arc': KicadElementArc,
-		'polyline': KicadElementPolyline,
 		'sheet': KicadElementSheet,
 		'global_label': KicadElementGlobalLabel,
 		'net': KicadElementNet,
@@ -85,8 +83,16 @@ export class KicadParser {
 		'wire': KicadElementWire,
 		'junction': KicadElementJunction,
 		'no_connect': KicadElementNoConnect,
+		/** Shapes */
+		'arc': KicadElementArc,
+		'polyline': KicadElementPolyline,
+		'polygon': KicadElementPolygon,
+		'circle': KicadElementCircle,
+		'rectangle': KicadElementRectangle,
+
 		/** Points and coordinates */
 		'start': KicadElementStart,
+		'center': KicadElementCenter,
 		'mid': KicadElementMid,
 		'end': KicadElementEnd,
 		'at': KicadElementAt,
@@ -138,8 +144,7 @@ export class KicadParser {
 		'fields_autoplaced': KicadElementFieldsAutoplaced,
 		'unlocked': KicadElementUnlocked,
 		'hide': KicadElementHide,
-		'pin': KicadElementPin,
-		'rectangle': KicadElementRectangle
+		'pin': KicadElementPin
 	};
 
 	tokenizeKicad(text: string): KicadToken[] {

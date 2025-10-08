@@ -1,9 +1,17 @@
-import { KicadElementStroke, KicadStrokeType } from './KicadElementStroke';
-import { KicadElementPts }                     from './KicadElementPts';
-import { KicadElementXY }                      from './KicadElementXY';
-import { KicadElement }                        from './KicadElement';
+import { KicadElementShapeBase } from './KicadElementShapeBase';
+import { KicadElementPts }       from './KicadElementPts';
+import { KicadElementXY }        from './KicadElementXY';
 
-export class KicadElementPolyline extends KicadElement {
+/**
+ * (polyline
+ * 	(pts
+ * 	(xy -1.27 -1.27) (xy -1.27 1.27) (xy -0.762 1.27)
+ * 	)
+ * 	(stroke (width 0.254) (type default))
+ * 	(fill (type none))
+ * )
+ */
+export class KicadElementPolyline extends KicadElementShapeBase {
 	override name = 'polyline';
 
 	getPoints(): Array<{ x: number, y: number }> {
@@ -13,14 +21,5 @@ export class KicadElementPolyline extends KicadElement {
 		}
 		const type = pts.findChildrenByClass(KicadElementXY);
 		return type.map(p => ({ x: p.x, y: p.y }));
-	}
-
-	getStroke(): { width: number, type: KicadStrokeType } {
-		const stroke = this.findFirstChildByClass(KicadElementStroke);
-		if (!stroke) {
-			return { width: 0.1, type: 'solid' }; // Default stroke
-		}
-
-		return { width: stroke.getWidth(), type: stroke.getType() }; // Example color for dashed
 	}
 }

@@ -29,4 +29,31 @@ export class KicadElementShapeBase extends KicadElement {
 		const fill = this.findFirstChildByClass(KicadElementFill);
 		return fill?.getType() ?? 'none';
 	}
+
+	getFillColor(defaultColor = 'rgba(0,0,0,0)'): string {
+		const fill = this.findFirstChildByClass(KicadElementFill);
+		if (!fill) {
+			return defaultColor;
+		}
+		switch (fill.getType()) {
+			case 'none':
+				return 'rgba(0,0,0,0)';
+			case 'outline':
+				return defaultColor;
+			case 'background':
+				return defaultColor;
+			case 'color':
+				return fill.getColor();
+			default:
+				return defaultColor;
+		}
+	}
+
+	getStrokeColor(defaultColor = 'rgba(0,0,0,0)'): string {
+		const stroke = this.findFirstChildByClass(KicadElementStroke);
+		if (!stroke) {
+			return defaultColor;
+		}
+		return stroke.getColor(defaultColor)
+	}
 }

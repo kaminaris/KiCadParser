@@ -37,6 +37,24 @@ export class KicadElementColor extends KicadElement {
 		this.color = color;
 	}
 
+	getColor(): string {
+		if (this.color) {
+			return this.color;
+		}
+
+		// Transparent if color not set
+		if (this.red === undefined || this.green === undefined || this.blue === undefined) {
+			return 'rgba(0,0,0,0)';
+		}
+
+		// If alpha is not defined, return rgb()
+		if (this.alpha === undefined) {
+			return `rgb(${ this.red },${ this.green },${ this.blue })`;
+		}
+
+		return `rgba(${ this.red },${ this.green },${ this.blue },${ this.alpha })`;
+	}
+
 	override write(): string {
 		if (this.color) {
 			return this.pad() + `(color "${ this.color }")`;

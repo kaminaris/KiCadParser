@@ -30,4 +30,13 @@ export class KicadElementCircle extends KicadElementShapeBase {
 			this.addChild(e);
 		}
 	}
+
+	getCenterRadius(): { center: { x: number, y: number }, radius: number } {
+		const center = this.findFirstChildByClass(KicadElementCenter);
+		const radius = this.findFirstChildByClass(KicadElementRadius);
+		return {
+			center: { x: center?.x ?? 0, y: center?.y ?? 0 },
+			radius: radius?.value ?? 0
+		};
+	}
 }

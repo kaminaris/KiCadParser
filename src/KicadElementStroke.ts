@@ -35,6 +35,15 @@ export class KicadElementStroke extends KicadElement {
 		colorAttr.setColor(r, g, b, a);
 	}
 
+	getColor(defaultColor = 'rgba(0,0,0,0)'): string {
+		const t = this.findFirstChildByClass(KicadElementColor);
+		if (!t) {
+			return defaultColor;
+		}
+
+		return t.getColor();
+	}
+
 	override afterParse() {
 
 	}
