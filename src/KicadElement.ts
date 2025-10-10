@@ -84,6 +84,14 @@ export class KicadElement {
 		return this.children.filter(c => c.name === 'property');
 	}
 
+	getOrigin(): { x: number, y: number, rotation: number } {
+		const xy = this.findFirstChildByName('at') as any;
+		if (!xy) {
+			return { x: 0, y: 0, rotation: 0 };
+		}
+		return { x: xy.x, y: xy.y, rotation: xy.rotation ?? 0 };
+	}
+
 	findAllChildrenByClass<T extends KicadElement>(cls: new (...args: any[]) => T): T[] {
 		let results: T[] = [];
 		for (const child of this.children) {

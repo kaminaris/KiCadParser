@@ -1,9 +1,11 @@
-import { KicadElementShapeBase }               from './KicadElementShapeBase';
-import { KicadElementEnd, KicadElementStart }  from './KicadElementXY';
+import { WithLayer }                          from 'src/app/Lib/Kicad/src/Mixins/WithLayer';
+import { KicadElementShapeBase }              from './KicadElementShapeBase';
+import { KicadElementEnd, KicadElementStart } from './KicadElementXY';
 
-export class KicadElementRectangle extends KicadElementShapeBase {
-	override name = 'rectangle';
-
+/**
+ * Elements that have a start and end point, like lines, rectangles, etc.
+ */
+export class KicadElementStartEnd extends KicadElementShapeBase {
 	constructor(
 		startX?: number,
 		startY?: number,
@@ -31,4 +33,12 @@ export class KicadElementRectangle extends KicadElementShapeBase {
 			end: { x: end?.x ?? 0, y: end?.y ?? 0 }
 		};
 	}
+}
+
+export class KicadElementRectangle extends KicadElementStartEnd {
+	override name = 'rectangle';
+}
+
+export class KicadElementGrLine extends WithLayer(KicadElementStartEnd) {
+	override name = 'gr_line';
 }

@@ -105,14 +105,6 @@ export class KicadElementPin extends KicadElement {
 		}
 	}
 
-	getOrigin(): { x: number, y: number, rotation: number } {
-		const xy = this.findFirstChildByClass(KicadElementAt);
-		if (!xy) {
-			return { x: 0, y: 0, rotation: 0 };
-		}
-		return { x: xy.x, y: xy.y, rotation: xy.rotation ?? 0 };
-	}
-
 	isHidden() {
 		const hiddenChild = this.findFirstChildByClass(KicadElementHide);
 		return hiddenChild ? hiddenChild.value : false;

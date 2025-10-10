@@ -36,15 +36,6 @@ export class KicadElementProperty extends KicadElement {
 		}
 	}
 
-	getOrigin(): { x: number, y: number, rotation: number } {
-		const at = this.findFirstChildByClass(KicadElementAt);
-		if (!at) {
-			return { x: 0, y: 0, rotation: 0 };
-		}
-
-		return { x: at.x, y: at.y, rotation: at.rotation ?? 0 };
-	}
-
 	setUnlocked(unlocked: boolean) {
 		let found = this.findFirstChildByClass(KicadElementUnlocked);
 		if (!found) {

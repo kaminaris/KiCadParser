@@ -1,4 +1,4 @@
-import { KicadElementUnit }       from 'src/app/Lib/Kicad/src/KicadElementNumeric';
+import { KicadElementUnit }       from './KicadElementNumeric';
 import { KicadElementLibId }      from './KicadElementString';
 import { KicadElementPinNumbers } from './KicadElementPinNumbers';
 import { KicadElementAt }         from './KicadElementAt';
@@ -23,14 +23,6 @@ export class KicadElementSymbol extends KicadElement {
 
 	getLayers() {
 		return this.findChildrenByClass(KicadElementSymbol);
-	}
-
-	getOrigin(): { x: number, y: number, rotation: number } {
-		const xy = this.findFirstChildByClass(KicadElementAt);
-		if (!xy) {
-			return { x: 0, y: 0, rotation: 0 };
-		}
-		return { x: xy.x, y: xy.y, rotation: xy.rotation ?? 0 };
 	}
 
 	setSymbolName(name: string) {

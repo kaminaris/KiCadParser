@@ -10,6 +10,13 @@ export type KicadFillType = 'none' | 'outline' | 'background' | 'color';
 export class KicadElementFill extends KicadElement {
 	override name = 'fill';
 
+	isFilled(): boolean {
+		if (this.attributes.length < 1) {
+			return false;
+		}
+		const firstAttr = this.attributes[0];
+		return firstAttr.value === 'yes' || firstAttr.value === true;
+	}
 	setType(value: KicadFillType) {
 		const t = this.findOrCreateChildByClass(KicadElementType);
 		t.setAttribute({ value, format: 'literal' }, 0);

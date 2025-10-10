@@ -1,3 +1,9 @@
+import { KicadElement }                        from 'src/app/Lib/Kicad/src/KicadElement';
+import { WithCenter }                          from 'src/app/Lib/Kicad/src/Mixins/WithCenter';
+import { WithEnd }                             from 'src/app/Lib/Kicad/src/Mixins/WithEnd';
+import { WithLayer }                           from 'src/app/Lib/Kicad/src/Mixins/WithLayer';
+import { WithStart }                           from 'src/app/Lib/Kicad/src/Mixins/WithStart';
+import { WithStroke }                          from 'src/app/Lib/Kicad/src/Mixins/WithStroke';
 import { KicadElementRadius }                  from './KicadElementNumeric';
 import { KicadElementShapeBase }               from './KicadElementShapeBase';
 import { KicadElementCenter, KicadElementMid } from './KicadElementXY';
@@ -39,4 +45,8 @@ export class KicadElementCircle extends KicadElementShapeBase {
 			radius: radius?.value ?? 0
 		};
 	}
+}
+
+export class KicadElementGrCircle extends WithLayer(WithStroke(WithEnd(WithCenter(KicadElement)))) {
+	override name = 'gr_circle';
 }

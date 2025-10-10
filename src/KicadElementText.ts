@@ -1,4 +1,6 @@
-import { KicadElement } from './KicadElement';
+import { KicadElementEffects }                          from './KicadElementEffects';
+import { KicadJustifyHorizontal, KicadJustifyVertical } from './KicadElementJustify';
+import { KicadElement }                                 from './KicadElement';
 
 export class KicadElementText extends KicadElement {
 	value: string = '';
@@ -8,6 +10,18 @@ export class KicadElementText extends KicadElement {
 		if (v !== undefined) {
 			this.value = v;
 		}
+	}
+
+	getJustify(): {
+		horizontal: KicadJustifyHorizontal,
+		vertical: KicadJustifyVertical,
+		mirrored: boolean
+	} {
+		const eff = this.findFirstChildByClass(KicadElementEffects);
+		if (!eff) {
+			return { horizontal: 'left', vertical: 'middle', mirrored: false };
+		}
+		return eff.getJustify();
 	}
 
 	override afterParse() {
