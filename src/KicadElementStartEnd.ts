@@ -1,4 +1,4 @@
-import { WithLayer }                          from 'src/app/Lib/Kicad/src/Mixins/WithLayer';
+import { WithLayer }                          from './Mixins/WithLayer';
 import { KicadElementShapeBase }              from './KicadElementShapeBase';
 import { KicadElementEnd, KicadElementStart } from './KicadElementXY';
 

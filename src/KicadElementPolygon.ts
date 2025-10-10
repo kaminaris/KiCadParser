@@ -1,6 +1,6 @@
-import { WithLayer }    from 'src/app/Lib/Kicad/src/Mixins/WithLayer';
-import { WithPts }      from 'src/app/Lib/Kicad/src/Mixins/WithPts';
-import { WithStroke }   from 'src/app/Lib/Kicad/src/Mixins/WithStroke';
+import { WithLayer }    from './Mixins/WithLayer';
+import { WithPts }      from './Mixins/WithPts';
+import { WithStroke }   from './Mixins/WithStroke';
 import { KicadElement } from './KicadElement';
 
 export class KicadElementPolygon extends WithPts(KicadElement) {
