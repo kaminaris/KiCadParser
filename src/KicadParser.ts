@@ -3,7 +3,12 @@ import {
 	KicadElementInBom, KicadElementItalic, KicadElementOnBoard, KicadElementUnlocked
 } from './KicadElementBoolean';
 import {
-	KicadElementDiameter, KicadElementLength, KicadElementRadius, KicadElementThickness, KicadElementUnit,
+	KicadElementDiameter, KicadElementIslandAreaMin, KicadElementIslandRemovalMode, KicadElementLength,
+	KicadElementMinThickness,
+	KicadElementRadius,
+	KicadElementThermalBridgeWidth, KicadElementThermalGap,
+	KicadElementThickness,
+	KicadElementUnit,
 	KicadElementVersion,
 	KicadElementWidth
 } from './KicadElementNumeric';
@@ -12,53 +17,59 @@ import {
 } from './KicadElementNumericFixed';
 import {
 	KicadElementCompany, KicadElementDate, KicadElementFace, KicadElementGenerator, KicadElementGeneratorVersion,
-	KicadElementLibId, KicadElementReference,
+	KicadElementLibId, KicadElementNetName, KicadElementReference,
 	KicadElementRev, KicadElementTitle
 } from './KicadElementString';
 import {
 	KicadElementCenter, KicadElementEnd, KicadElementMid, KicadElementStart, KicadElementXY
 } from './KicadElementXY';
 
-import { KicadElementLayers }                                            from './KicadElementLayers';
-import { KicadElementGrLine, KicadElementGrRect, KicadElementRectangle } from './KicadElementStartEnd';
-import { KicadElementCircle, KicadElementGrCircle } from './KicadElementCircle';
-import { KicadElementArc, KicadElementGrArc } from './KicadElementArc';
-import { KicadElementPinNumbers }                   from './KicadElementPinNumbers';
-import { KicadElementBezier, KicadElementGrCurve, KicadElementPolyline } from './KicadElementPolyline';
-import { KicadElementGlobalLabel }                                       from './KicadElementGlobalLabel';
-import { KicadElementJunction }                      from './KicadElementJunction';
-import { KicadElementShape }                         from './KicadElementLiteral';
-import { KicadElementNoConnect }                     from './KicadElementNoConnect';
-import { KicadElementWire }                     from './KicadElementWire';
-import { KicadElementGrText, KicadElementText } from './KicadElementText';
-import { KicadElementComment }                  from './KicadElementComment';
-import { KicadElementTitleBlock }                    from './KicadElementTitleBlock';
-import { KicadElementFill }                          from './KicadElementFill';
-import { KicadElementFootprint }                     from './KicadElementFootprint';
-import { KicadElementLayer }                         from './KicadElementLayer';
-import { KicadElementName }                          from './KicadElementName';
-import { KicadElementNet }                           from './KicadElementNet';
-import { KicadElementNumber }                        from './KicadElementNumber';
-import { KicadElementGrPoly, KicadElementPolygon }   from './KicadElementPolygon';
-import { KicadElementSymbolLib }                     from './KicadElementSymbolLib';
-import { KicadElementAt }                            from './KicadElementAt';
-import { KicadElementColor }                         from './KicadElementColor';
-import { KicadElementData }                          from './KicadElementData';
-import { KicadElementEffects }                       from './KicadElementEffects';
-import { KicadElementFont }                          from './KicadElementFont';
-import { KicadElementJustify }                       from './KicadElementJustify';
-import { KicadElementLibSymbols }                    from './KicadElementLibSymbols';
-import { KicadElementOffset }                        from './KicadElementOffset';
-import { KicadElementPin }                           from './KicadElementPin';
-import { KicadElementProperty }                      from './KicadElementProperty';
-import { KicadElementPts }                           from './KicadElementPts';
-import { KicadElementSheet }                         from './KicadElementSheet';
-import { KicadElementSize }                          from './KicadElementSize';
-import { KicadElementStroke }                        from './KicadElementStroke';
-import { KicadElementSymbol }                        from './KicadElementSymbol';
-import { KicadElementType }                          from './KicadElementType';
-import { KicadElementUUID }                          from './KicadElementUUID';
-import { KicadElement }                              from './KicadElement';
+import {
+	KicadElementFpLine,
+	KicadElementGrLine, KicadElementGrRect, KicadElementRectangle, KicadElementSegment
+} from './KicadElementStartEnd';
+
+import { KicadElementFilledPolygon, KicadElementGrPoly, KicadElementPolygon } from './KicadElementPolygon';
+import { KicadElementCircle, KicadElementFpCircle, KicadElementGrCircle }     from './KicadElementCircle';
+import { KicadElementBezier, KicadElementGrCurve, KicadElementPolyline }      from './KicadElementPolyline';
+import { KicadElementArc, KicadElementGrArc }                                 from './KicadElementArc';
+import { KicadElementPad }                                                    from './KicadElementPad';
+import { KicadElementZone }                                                   from './KicadElementZone';
+import { KicadElementLayers }                                                 from './KicadElementLayers';
+import { KicadElementPinNumbers }                                             from './KicadElementPinNumbers';
+import { KicadElementGlobalLabel }                                            from './KicadElementGlobalLabel';
+import { KicadElementJunction }                                               from './KicadElementJunction';
+import { KicadElementShape }                                                  from './KicadElementLiteral';
+import { KicadElementNoConnect }                                              from './KicadElementNoConnect';
+import { KicadElementWire }                                                   from './KicadElementWire';
+import { KicadElementGrText, KicadElementText }                               from './KicadElementText';
+import { KicadElementComment }                                                from './KicadElementComment';
+import { KicadElementTitleBlock }                                             from './KicadElementTitleBlock';
+import { KicadElementFill }                                                   from './KicadElementFill';
+import { KicadElementFootprint }                                              from './KicadElementFootprint';
+import { KicadElementLayer }                                                  from './KicadElementLayer';
+import { KicadElementName }                                                   from './KicadElementName';
+import { KicadElementNet }                                                    from './KicadElementNet';
+import { KicadElementNumber }                                                 from './KicadElementNumber';
+import { KicadElementSymbolLib }                                              from './KicadElementSymbolLib';
+import { KicadElementAt }                                                     from './KicadElementAt';
+import { KicadElementColor }                                                  from './KicadElementColor';
+import { KicadElementData }                                                   from './KicadElementData';
+import { KicadElementEffects }                                                from './KicadElementEffects';
+import { KicadElementFont }                                                   from './KicadElementFont';
+import { KicadElementJustify }                                                from './KicadElementJustify';
+import { KicadElementLibSymbols }                                             from './KicadElementLibSymbols';
+import { KicadElementOffset }                                                 from './KicadElementOffset';
+import { KicadElementPin }                                                    from './KicadElementPin';
+import { KicadElementProperty }                                               from './KicadElementProperty';
+import { KicadElementPts }                                                    from './KicadElementPts';
+import { KicadElementSheet }                                                  from './KicadElementSheet';
+import { KicadElementSize }                                                   from './KicadElementSize';
+import { KicadElementStroke }                                                 from './KicadElementStroke';
+import { KicadElementSymbol }                                                 from './KicadElementSymbol';
+import { KicadElementType }                                                   from './KicadElementType';
+import { KicadElementUUID }                                                   from './KicadElementUUID';
+import { KicadElement }                                                       from './KicadElement';
 
 export type KicadToken = { type: 'paren' | 'string' | 'number' | 'symbol', value: string };
 
@@ -81,6 +92,7 @@ export class KicadParser {
 		'width': KicadElementWidth,
 		'offset': KicadElementOffset,
 		'pin_numbers': KicadElementPinNumbers,
+		'pad': KicadElementPad,
 		'size': KicadElementSize,
 		'wire': KicadElementWire,
 		'junction': KicadElementJunction,
@@ -94,10 +106,15 @@ export class KicadParser {
 		'gr_poly': KicadElementGrPoly,
 		'circle': KicadElementCircle,
 		'gr_circle': KicadElementGrCircle,
+		'fp_circle': KicadElementFpCircle,
 		'rectangle': KicadElementRectangle,
 		'gr_rect': KicadElementGrRect,
 		'gr_line': KicadElementGrLine,
+		'segment': KicadElementSegment,
 		'gr_curve': KicadElementGrCurve,
+		'zone': KicadElementZone,
+		'fp_line': KicadElementFpLine,
+		'filled_polygon': KicadElementFilledPolygon,
 
 		/** Points and coordinates */
 		'start': KicadElementStart,
@@ -112,6 +129,11 @@ export class KicadParser {
 		'version': KicadElementVersion,
 		'diameter': KicadElementDiameter,
 		'thickness': KicadElementThickness,
+		'min_thickness': KicadElementMinThickness,
+		'thermal_gap': KicadElementThermalGap,
+		'thermal_bridge_width': KicadElementThermalBridgeWidth,
+		'island_removal_mode': KicadElementIslandRemovalMode,
+		'island_area_min': KicadElementIslandAreaMin,
 		'radius': KicadElementRadius,
 		'length': KicadElementLength,
 		'color': KicadElementColor,
@@ -125,6 +147,7 @@ export class KicadParser {
 		'name': KicadElementName,
 		'title': KicadElementTitle,
 		'date': KicadElementDate,
+		'net_name': KicadElementNetName,
 		'rev': KicadElementRev,
 		'text': KicadElementText,
 		'gr_text': KicadElementGrText,

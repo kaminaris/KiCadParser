@@ -40,6 +40,26 @@ export class KicadElementThickness extends KicadElementNumeric {
 	override name = 'thickness';
 }
 
+export class KicadElementMinThickness extends KicadElementNumeric {
+	override name = 'min_thickness';
+}
+
+export class KicadElementThermalGap extends KicadElementNumeric {
+	override name = 'thermal_gap';
+}
+
+export class KicadElementThermalBridgeWidth extends KicadElementNumeric {
+	override name = 'thermal_bridge_width';
+}
+
+export class KicadElementIslandRemovalMode extends KicadElementNumeric {
+	override name = 'island_removal_mode';
+}
+
+export class KicadElementIslandAreaMin extends KicadElementNumeric {
+	override name = 'island_area_min';
+}
+
 export class KicadElementVersion extends KicadElementNumeric {
 	override name = 'version';
 }

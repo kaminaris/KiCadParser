@@ -1,10 +1,10 @@
+import { WithOrigin }        from './Mixins/WithOrigin';
 import { KicadElementShape } from './KicadElementLiteral';
-import { KicadElementAt }    from './KicadElementAt';
 import { KicadElement }      from './KicadElement';
 
 export type KicadGlobalLabelShape = 'input' | 'output' | 'bidirectional' | 'tri_state' | 'passive';
 
-export class KicadElementGlobalLabel extends KicadElement {
+export class KicadElementGlobalLabel extends WithOrigin(KicadElement) {
 	override name = 'global_label';
 
 	getName(): string {

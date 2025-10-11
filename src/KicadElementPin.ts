@@ -1,8 +1,8 @@
+import { WithOrigin }         from './Mixins/WithOrigin';
 import { KicadElementHide }   from './KicadElementBoolean';
 import { KicadElementLength } from './KicadElementNumeric';
 import { KicadElementNumber } from './KicadElementNumber';
 import { KicadElement }       from './KicadElement';
-import { KicadElementAt }     from './KicadElementAt';
 import { KicadElementName }   from './KicadElementName';
 
 export type KicadPinElectricalType = 'input'
@@ -28,7 +28,7 @@ export type KicadPinShape = 'line'
 	| 'edge_clock_high'
 	| 'non_logic';
 
-export class KicadElementPin extends KicadElement {
+export class KicadElementPin extends WithOrigin(KicadElement) {
 	override name = 'pin';
 
 	setType(electricalType: KicadPinElectricalType, shape: KicadPinShape) {
@@ -89,20 +89,6 @@ export class KicadElementPin extends KicadElement {
 			return 0;
 		}
 		return length.value ?? 0;
-	}
-
-	setOrigin(x: number, y: number, size?: number) {
-		let found = this.findFirstChildByClass(KicadElementAt);
-		if (!found) {
-			found = new KicadElementAt();
-			this.addChild(found);
-		}
-		found.x = x;
-		found.y = y;
-
-		if (size !== undefined) {
-			found.rotation = size;
-		}
 	}
 
 	isHidden() {

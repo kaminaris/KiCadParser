@@ -1,11 +1,12 @@
+import { WithOrigin }             from './Mixins/WithOrigin';
+import { WithProperties }         from './Mixins/WithProperties';
 import { KicadElementUnit }       from './KicadElementNumeric';
 import { KicadElementLibId }      from './KicadElementString';
 import { KicadElementPinNumbers } from './KicadElementPinNumbers';
-import { KicadElementAt }         from './KicadElementAt';
 import { KicadElement }           from './KicadElement';
 import { KicadElementProperty }   from './KicadElementProperty';
 
-export class KicadElementSymbol extends KicadElement {
+export class KicadElementSymbol extends WithOrigin(WithProperties(KicadElement)) {
 	override name = 'symbol';
 	symbolName?: string;
 
@@ -56,29 +57,6 @@ export class KicadElementSymbol extends KicadElement {
 		return hideChild ? hideChild.isHidden() : false;
 	}
 
-	getAllProperties(): Record<string, string> {
-		const props: Record<string, string> = {};
-		for (const child of this.children) {
-			if (child instanceof KicadElementProperty) {
-				props[child.propertyName!] = child.propertyValue!;
-			}
-		}
-		return props;
-	}
-
-	getVisibleProperties(): Record<string, KicadElementProperty> {
-		const props: Record<string, KicadElementProperty> = {};
-		for (const child of this.children) {
-			if (child instanceof KicadElementProperty) {
-				if (child.isHidden()) {
-					continue;
-				}
-				props[child.propertyName!] = child;
-			}
-		}
-		return props;
-	}
-
 	static filterRealSymbols(symbols: KicadElementSymbol[]): KicadElementSymbol[] {
 		return symbols.filter(s => {
 			const props = s.getAllProperties();
@@ -90,23 +68,6 @@ export class KicadElementSymbol extends KicadElement {
 			}
 			return true;
 		});
-	}
-
-	getPropertyByName(name: string): KicadElementProperty | undefined {
-		return this.children.find(
-			c => c instanceof KicadElementProperty && c.propertyName === name) as KicadElementProperty | undefined;
-	}
-
-	setProperty(name: string, value: string) {
-		let prop = this.children.find(
-			c => c instanceof KicadElementProperty && c.propertyName === name) as KicadElementProperty | undefined;
-		if (!prop) {
-			prop = new KicadElementProperty(name, value);
-			this.children.push(prop);
-		}
-		else {
-			prop.propertyValue = value;
-		}
 	}
 
 	addBaselineProperties() {

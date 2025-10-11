@@ -1,8 +1,9 @@
-import { KicadElement }          from './KicadElement';
-import { WithFill }              from './Mixins/WithFill';
-import { WithLayer }             from './Mixins/WithLayer';
-import { WithPts }               from './Mixins/WithPts';
-import { WithStroke }            from './Mixins/WithStroke';
+import { WithLayerColor } from './Mixins/WithLayerColor';
+import { KicadElement }   from './KicadElement';
+import { WithFill }       from './Mixins/WithFill';
+import { WithLayer }      from './Mixins/WithLayer';
+import { WithPts }        from './Mixins/WithPts';
+import { WithStroke }     from './Mixins/WithStroke';
 
 /**
  * (polyline
@@ -41,6 +42,6 @@ export class KicadElementBezier extends WithPts(WithStroke(WithFill(KicadElement
  * 		(uuid "5cf110ae-254e-4f09-aaa3-a08317319d78")
  * 	)
  */
-export class KicadElementGrCurve extends WithLayer(WithPts(WithStroke(WithFill(KicadElement)))) {
+export class KicadElementGrCurve extends WithLayer(WithLayerColor(WithPts(WithStroke(WithFill(KicadElement))))) {
 	override name = 'gr_curve';
 }

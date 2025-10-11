@@ -1,9 +1,11 @@
-import { WithEffects }  from './Mixins/WithEffects';
-import { WithJustify }  from './Mixins/WithJustify';
-import { WithLayer }    from './Mixins/WithLayer';
-import { KicadElement } from './KicadElement';
+import { WithLayerColor } from './Mixins/WithLayerColor';
+import { WithOrigin }     from './Mixins/WithOrigin';
+import { WithEffects }    from './Mixins/WithEffects';
+import { WithJustify }    from './Mixins/WithJustify';
+import { WithLayer }      from './Mixins/WithLayer';
+import { KicadElement }   from './KicadElement';
 
-export class KicadElementText extends WithEffects(WithJustify(KicadElement)) {
+export class KicadElementText extends WithOrigin(WithEffects(WithJustify(KicadElement))) {
 	value: string = '';
 
 	constructor(v?: string) {
@@ -28,6 +30,6 @@ export class KicadElementText extends WithEffects(WithJustify(KicadElement)) {
 	}
 }
 
-export class KicadElementGrText extends WithLayer(KicadElementText) {
+export class KicadElementGrText extends WithLayer(WithLayerColor(KicadElementText)) {
 	override name = 'gr_text';
 }

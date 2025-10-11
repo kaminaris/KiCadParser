@@ -1,12 +1,12 @@
+import { WithEffects }              from './Mixins/WithEffects';
+import { WithOrigin }               from './Mixins/WithOrigin';
 import { WithJustify }              from './Mixins/WithJustify';
 import { KicadElementUnlocked }     from './KicadElementBoolean';
-import { KicadElementEffects }      from './KicadElementEffects';
-import { KicadElementAt }           from './KicadElementAt';
 import { KicadElementLayer }        from './KicadElementLayer';
 import { KicadElementUUID }         from './KicadElementUUID';
 import { KicadElement, KicadLayer } from './KicadElement';
 
-export class KicadElementProperty extends WithJustify(KicadElement) {
+export class KicadElementProperty extends WithOrigin(WithEffects(WithJustify(KicadElement))) {
 	override name = 'property';
 	propertyName?: string;
 	literalName?: boolean;
@@ -19,20 +19,6 @@ export class KicadElementProperty extends WithJustify(KicadElement) {
 		}
 		if (value !== undefined) {
 			this.propertyValue = value;
-		}
-	}
-
-	setOrigin(x: number, y: number, rotation?: number) {
-		let found = this.findFirstChildByClass(KicadElementAt);
-		if (!found) {
-			found = new KicadElementAt();
-			this.addChild(found);
-		}
-		found.x = x;
-		found.y = y;
-
-		if (rotation !== undefined) {
-			found.rotation = rotation;
 		}
 	}
 
@@ -95,42 +81,5 @@ export class KicadElementProperty extends WithJustify(KicadElement) {
 		}
 
 		return `${ pre }\n${ this.writeChildren() }\n${ this.pad() })`;
-	}
-
-	getOrCreateEffects(): KicadElementEffects {
-		let effChild = this.findFirstChildByClass(KicadElementEffects);
-		if (!effChild) {
-			effChild = new KicadElementEffects();
-			this.addChild(effChild);
-		}
-		return effChild;
-	}
-
-	setFont(width: number, height: number, italic?: boolean, bold?: boolean) {
-		let effChild = this.getOrCreateEffects();
-		effChild.setFont(width, height, italic, bold);
-	}
-
-	getFont(): { width: number, height: number, italic: boolean, bold: boolean } {
-		const effChild = this.findFirstChildByClass(KicadElementEffects);
-		if (!effChild) {
-			return { width: 1.27, height: 1.27, italic: false, bold: false };
-		}
-
-		return effChild.getFont();
-	}
-
-	setHidden(b: boolean) {
-		let effChild = this.getOrCreateEffects();
-		effChild.setHidden(b);
-	}
-
-	isHidden(): boolean {
-		const effChild = this.findFirstChildByClass(KicadElementEffects);
-		if (!effChild) {
-			return false;
-		}
-
-		return effChild.isHidden();
 	}
 }

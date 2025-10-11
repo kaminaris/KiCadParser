@@ -60,3 +60,7 @@ export class KicadElementLibId extends KicadElementString {
 export class KicadElementReference extends KicadElementString {
 	override name = 'reference';
 }
+
+export class KicadElementNetName extends KicadElementString {
+	override name = 'net_name';
+}

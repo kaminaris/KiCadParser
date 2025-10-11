@@ -1,3 +1,4 @@
+import { WithLayerColor }        from './Mixins/WithLayerColor';
 import { KicadElement }          from './KicadElement';
 import { WithCenter }            from './Mixins/WithCenter';
 import { WithEnd }               from './Mixins/WithEnd';
@@ -46,6 +47,16 @@ export class KicadElementCircle extends KicadElementShapeBase {
 	}
 }
 
-export class KicadElementGrCircle extends WithLayer(WithStroke(WithEnd(WithCenter(KicadElement)))) {
+export class KicadElementGrCircle extends WithLayer(WithLayerColor(WithStroke(WithEnd(WithCenter(KicadElement))))) {
 	override name = 'gr_circle';
+}
+
+export class KicadElementFpCircle extends WithLayer(WithLayerColor(WithStroke(WithEnd(WithCenter(KicadElement))))) {
+	override name = 'fp_circle';
+
+	constructor(centerX?: number, centerY?: number, radius?: number) {
+		super();
+		this.setCenter(centerX, centerY);
+		// this.setRadius(radius);
+	}
 }

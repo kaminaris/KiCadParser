@@ -1,14 +1,19 @@
-import { KicadElementProperty } from '../KicadElementProperty';
-import { KicadElementSymbol }   from '../KicadElementSymbol';
-import { KicadParser }          from '../KicadParser';
-import { KicadElement }         from '../KicadElement';
+import { KicadElementSheet }  from '../KicadElementSheet';
+import { KicadElementSymbol } from '../KicadElementSymbol';
+import { KicadParser }        from '../KicadParser';
+import { KicadElement }       from '../KicadElement';
 
 export interface PathUtils {
 	dirname(filePath: string): string;
+
 	resolve(...paths: string[]): string;
+
 	join(...paths: string[]): string;
+
 	basename(filePath: string, ext?: string): string;
+
 	extname(filePath: string): string;
+
 	isAbsolute(filePath: string): boolean;
 }
 
@@ -66,9 +71,9 @@ export class KicadSchematic {
 		}
 
 		// Extract hierarchical sheets
-		const sheetElements = this.rootElement.findAllChildrenByName('sheet');
+		const sheetElements = this.rootElement.findAllChildrenByClass(KicadElementSheet);
 		for (const sheetEl of sheetElements) {
-			const properties = sheetEl.getProperties() as KicadElementProperty[];
+			const properties = sheetEl.getProperties();
 
 			const nameProp = properties.find(p => p.propertyName === 'Sheetname');
 			if (!nameProp) {
