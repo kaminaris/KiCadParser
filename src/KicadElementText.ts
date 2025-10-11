@@ -1,8 +1,9 @@
-import { KicadElementEffects }                          from './KicadElementEffects';
-import { KicadJustifyHorizontal, KicadJustifyVertical } from './KicadElementJustify';
-import { KicadElement }                                 from './KicadElement';
+import { WithEffects }  from './Mixins/WithEffects';
+import { WithJustify }  from './Mixins/WithJustify';
+import { WithLayer }    from './Mixins/WithLayer';
+import { KicadElement } from './KicadElement';
 
-export class KicadElementText extends KicadElement {
+export class KicadElementText extends WithEffects(WithJustify(KicadElement)) {
 	value: string = '';
 
 	constructor(v?: string) {
@@ -10,18 +11,6 @@ export class KicadElementText extends KicadElement {
 		if (v !== undefined) {
 			this.value = v;
 		}
-	}
-
-	getJustify(): {
-		horizontal: KicadJustifyHorizontal,
-		vertical: KicadJustifyVertical,
-		mirrored: boolean
-	} {
-		const eff = this.findFirstChildByClass(KicadElementEffects);
-		if (!eff) {
-			return { horizontal: 'left', vertical: 'middle', mirrored: false };
-		}
-		return eff.getJustify();
 	}
 
 	override afterParse() {
@@ -37,4 +26,8 @@ export class KicadElementText extends KicadElement {
 	override write(): string {
 		return this.pad() + `(${ this.name } "${ this.value }"\n${ this.writeChildren() }\n${ this.pad() })`;
 	}
+}
+
+export class KicadElementGrText extends WithLayer(KicadElementText) {
+	override name = 'gr_text';
 }

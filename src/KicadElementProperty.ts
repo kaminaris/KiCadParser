@@ -1,12 +1,12 @@
-import { KicadElementUnlocked }                         from './KicadElementBoolean';
-import { KicadJustifyHorizontal, KicadJustifyVertical } from './KicadElementJustify';
-import { KicadElementEffects }                          from './KicadElementEffects';
-import { KicadElementAt }                               from './KicadElementAt';
-import { KicadElementLayer }                            from './KicadElementLayer';
-import { KicadElementUUID }                             from './KicadElementUUID';
-import { KicadElement, KicadLayer }                     from './KicadElement';
+import { WithJustify }              from './Mixins/WithJustify';
+import { KicadElementUnlocked }     from './KicadElementBoolean';
+import { KicadElementEffects }      from './KicadElementEffects';
+import { KicadElementAt }           from './KicadElementAt';
+import { KicadElementLayer }        from './KicadElementLayer';
+import { KicadElementUUID }         from './KicadElementUUID';
+import { KicadElement, KicadLayer } from './KicadElement';
 
-export class KicadElementProperty extends KicadElement {
+export class KicadElementProperty extends WithJustify(KicadElement) {
 	override name = 'property';
 	propertyName?: string;
 	literalName?: boolean;
@@ -118,19 +118,6 @@ export class KicadElementProperty extends KicadElement {
 		}
 
 		return effChild.getFont();
-	}
-
-	getJustify(): {
-		horizontal: KicadJustifyHorizontal,
-		vertical: KicadJustifyVertical,
-		mirrored: boolean
-	} {
-		const effChild = this.findFirstChildByClass(KicadElementEffects);
-		if (!effChild) {
-			return { horizontal: 'middle', vertical: 'middle', mirrored: false };
-		}
-
-		return effChild.getJustify();
 	}
 
 	setHidden(b: boolean) {

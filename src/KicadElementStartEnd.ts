@@ -1,44 +1,22 @@
-import { WithLayer }                          from './Mixins/WithLayer';
-import { KicadElementShapeBase }              from './KicadElementShapeBase';
-import { KicadElementEnd, KicadElementStart } from './KicadElementXY';
+import { KicadElement } from './KicadElement';
+import { WithFill }     from './Mixins/WithFill';
+import { WithStartEnd } from './Mixins/WithStartEnd';
+import { WithStroke }   from './Mixins/WithStroke';
+import { WithLayer }    from './Mixins/WithLayer';
 
-/**
- * Elements that have a start and end point, like lines, rectangles, etc.
- */
-export class KicadElementStartEnd extends KicadElementShapeBase {
-	constructor(
-		startX?: number,
-		startY?: number,
-		endX?: number,
-		endY?: number
-	) {
-		super();
-
-		if (startX !== undefined && startY !== undefined) {
-			const s = new KicadElementStart(startX, startY);
-			this.addChild(s);
-		}
-
-		if (endX !== undefined && endY !== undefined) {
-			const e = new KicadElementEnd(endX, endY);
-			this.addChild(e);
-		}
-	}
-
-	getStartEnd(): { start: { x: number, y: number }, end: { x: number, y: number } } {
-		const start = this.findFirstChildByClass(KicadElementStart);
-		const end = this.findFirstChildByClass(KicadElementEnd);
-		return {
-			start: { x: start?.x ?? 0, y: start?.y ?? 0 },
-			end: { x: end?.x ?? 0, y: end?.y ?? 0 }
-		};
-	}
-}
-
-export class KicadElementRectangle extends KicadElementStartEnd {
+export class KicadElementRectangle extends WithStartEnd(WithFill(WithStroke(KicadElement))) {
 	override name = 'rectangle';
+
+	constructor(sX: number, sY: number, eX: number, eY: number) {
+		super();
+		this.setStartEnd(sX, sY, eX, eY);
+	}
 }
 
-export class KicadElementGrLine extends WithLayer(KicadElementStartEnd) {
+export class KicadElementGrLine extends WithLayer(WithStartEnd(WithFill(WithStroke(KicadElement)))) {
 	override name = 'gr_line';
+}
+
+export class KicadElementGrRect extends WithLayer(WithStartEnd(WithFill(WithStroke(KicadElement)))) {
+	override name = 'gr_rect';
 }

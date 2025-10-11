@@ -1,6 +1,8 @@
-import { KicadElementShapeBase } from './KicadElementShapeBase';
-import { KicadElementPts }       from './KicadElementPts';
-import { KicadElementXY }        from './KicadElementXY';
+import { KicadElement }          from './KicadElement';
+import { WithFill }              from './Mixins/WithFill';
+import { WithLayer }             from './Mixins/WithLayer';
+import { WithPts }               from './Mixins/WithPts';
+import { WithStroke }            from './Mixins/WithStroke';
 
 /**
  * (polyline
@@ -11,17 +13,8 @@ import { KicadElementXY }        from './KicadElementXY';
  * 	(fill (type none))
  * )
  */
-export class KicadElementPolyline extends KicadElementShapeBase {
+export class KicadElementPolyline extends WithPts(WithStroke(WithFill(KicadElement))) {
 	override name = 'polyline';
-
-	getPoints(): Array<{ x: number, y: number }> {
-		const pts = this.findFirstChildByClass(KicadElementPts);
-		if (!pts) {
-			return [];
-		}
-		const type = pts.findChildrenByClass(KicadElementXY);
-		return type.map(p => ({ x: p.x, y: p.y }));
-	}
 }
 
 /**
@@ -34,15 +27,20 @@ export class KicadElementPolyline extends KicadElementShapeBase {
  * 	(uuid d14c3946-d818-4e0a-9944-0b0722dae728)
  * )
  */
-export class KicadElementBezier extends KicadElementShapeBase {
+export class KicadElementBezier extends WithPts(WithStroke(WithFill(KicadElement))) {
 	override name = 'bezier';
+}
 
-	getPoints(): Array<{ x: number, y: number }> {
-		const pts = this.findFirstChildByClass(KicadElementPts);
-		if (!pts) {
-			return [];
-		}
-		const type = pts.findChildrenByClass(KicadElementXY);
-		return type.map(p => ({ x: p.x, y: p.y }));
-	}
+/**
+ * 	(gr_curve
+ * 		(pts
+ * 			(xy -3.22 -0.565) (xy 0.565 4.715) (xy -2.825 -4.215) (xy 0 0)
+ * 		)
+ * 		(stroke (width 0.1) (type default))
+ * 		(layer "F.SilkS")
+ * 		(uuid "5cf110ae-254e-4f09-aaa3-a08317319d78")
+ * 	)
+ */
+export class KicadElementGrCurve extends WithLayer(WithPts(WithStroke(WithFill(KicadElement)))) {
+	override name = 'gr_curve';
 }

@@ -17,5 +17,13 @@ export function WithStroke<T extends Ctor<KicadElement>>(Base: T) {
 			}
 			return { width: str.getWidth(), type: str.getType() };
 		}
+
+		getStrokeColor(defaultColor = 'rgba(0,0,0,0)'): string {
+			const stroke = this.findFirstChildByClass(KicadElementStroke);
+			if (!stroke) {
+				return defaultColor;
+			}
+			return stroke.getColor(defaultColor)
+		}
 	};
 }
