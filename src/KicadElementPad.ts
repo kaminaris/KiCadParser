@@ -1,3 +1,4 @@
+import { WithDrill }          from './Mixins/WithDrill';
 import { KicadElementLayers } from './KicadElementLayers';
 import { WithOrigin }         from './Mixins/WithOrigin';
 import { KicadElement }       from './KicadElement';
@@ -16,15 +17,12 @@ export const KicadPadShapes: KicadPadShape[] = ['oval', 'rect', 'trapezoid', 'ci
  * 		(uuid "ada9ba87-9a30-451a-9527-e65964eac081")
  * 	)
  */
-export class KicadElementPad extends WithSize(WithOrigin(KicadElement)) {
+export class KicadElementPad extends WithDrill(WithSize(WithOrigin(KicadElement))) {
 	override name = 'pad';
 
 	padNumber = '1';
-	padType: 'thru_hole' | 'smd' = 'thru_hole'; // TODO: not complete
+	padType: 'thru_hole' | 'smd' | 'np_thru_hole' = 'thru_hole'; // TODO: not complete
 	shape: KicadPadShape = 'rect';
-
-	drillX?: number;
-	drillY?: number;
 
 	constructor(padNumber?: string, originX?: number, originY?: number, width?: number, height?: number) {
 		super();
@@ -63,11 +61,6 @@ export class KicadElementPad extends WithSize(WithOrigin(KicadElement)) {
 			}
 		}
 		return out;
-	}
-
-	setDrillSize(x: number, y: number) {
-		this.drillX = x;
-		this.drillY = y;
 	}
 
 	setType(type: string) {

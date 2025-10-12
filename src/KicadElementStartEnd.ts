@@ -28,6 +28,10 @@ export class KicadElementGrRect extends WithLayer(WithLayerColor(WithStartEnd(Wi
 	override name = 'gr_rect';
 }
 
+export class KicadElementFpRect extends WithLayer(WithLayerColor(WithStartEnd(WithFill(WithStroke(KicadElement))))) {
+	override name = 'fp_rect';
+}
+
 export class KicadElementFpLine extends WithLayer(WithStroke(WithStartEnd(KicadElement))) {
 	override name = 'fp_line';
 

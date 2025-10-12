@@ -1,12 +1,11 @@
-import { WithLayerColor }        from './Mixins/WithLayerColor';
-import { KicadElement }          from './KicadElement';
-import { WithCenter }            from './Mixins/WithCenter';
-import { WithEnd }               from './Mixins/WithEnd';
-import { WithLayer }             from './Mixins/WithLayer';
-import { WithStroke }            from './Mixins/WithStroke';
-import { KicadElementRadius }    from './KicadElementNumeric';
-import { KicadElementShapeBase } from './KicadElementShapeBase';
-import { KicadElementCenter }    from './KicadElementXY';
+import { WithFill }       from './Mixins/WithFill';
+import { WithRadius }     from './Mixins/WithRadius';
+import { WithLayerColor } from './Mixins/WithLayerColor';
+import { KicadElement }   from './KicadElement';
+import { WithCenter }     from './Mixins/WithCenter';
+import { WithEnd }        from './Mixins/WithEnd';
+import { WithLayer }      from './Mixins/WithLayer';
+import { WithStroke }     from './Mixins/WithStroke';
 
 /**
  * (circle
@@ -16,7 +15,7 @@ import { KicadElementCenter }    from './KicadElementXY';
  * 	(fill (type none))
  * )
  */
-export class KicadElementCircle extends KicadElementShapeBase {
+export class KicadElementCircle extends WithStroke(WithFill(WithCenter(WithRadius(KicadElement)))) {
 	override name = 'circle';
 
 	constructor(
@@ -26,24 +25,8 @@ export class KicadElementCircle extends KicadElementShapeBase {
 	) {
 		super();
 
-		if (centerX !== undefined && centerY !== undefined) {
-			const s = new KicadElementCenter(centerX, centerY);
-			this.addChild(s);
-		}
-
-		if (radius !== undefined) {
-			const e = new KicadElementRadius(radius);
-			this.addChild(e);
-		}
-	}
-
-	getCenterRadius(): { center: { x: number, y: number }, radius: number } {
-		const center = this.findFirstChildByClass(KicadElementCenter);
-		const radius = this.findFirstChildByClass(KicadElementRadius);
-		return {
-			center: { x: center?.x ?? 0, y: center?.y ?? 0 },
-			radius: radius?.value ?? 0
-		};
+		this.setCenter(centerX, centerY);
+		this.setRadius(radius);
 	}
 }
 

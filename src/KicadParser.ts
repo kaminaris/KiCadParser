@@ -25,14 +25,16 @@ import {
 } from './KicadElementXY';
 
 import {
-	KicadElementFpLine,
+	KicadElementFpLine, KicadElementFpRect,
 	KicadElementGrLine, KicadElementGrRect, KicadElementRectangle, KicadElementSegment
 } from './KicadElementStartEnd';
 
+import { KicadElementDrill }                                                  from './KicadElementDrill';
+import { KicadElementVia }                                                    from './KicadElementVia';
 import { KicadElementFilledPolygon, KicadElementGrPoly, KicadElementPolygon } from './KicadElementPolygon';
 import { KicadElementCircle, KicadElementFpCircle, KicadElementGrCircle }     from './KicadElementCircle';
 import { KicadElementBezier, KicadElementGrCurve, KicadElementPolyline }      from './KicadElementPolyline';
-import { KicadElementArc, KicadElementGrArc }                                 from './KicadElementArc';
+import { KicadElementArc, KicadElementFpArc, KicadElementGrArc }              from './KicadElementArc';
 import { KicadElementPad }                                                    from './KicadElementPad';
 import { KicadElementZone }                                                   from './KicadElementZone';
 import { KicadElementLayers }                                                 from './KicadElementLayers';
@@ -42,7 +44,7 @@ import { KicadElementJunction }                                               fr
 import { KicadElementShape }                                                  from './KicadElementLiteral';
 import { KicadElementNoConnect }                                              from './KicadElementNoConnect';
 import { KicadElementWire }                                                   from './KicadElementWire';
-import { KicadElementGrText, KicadElementText }                               from './KicadElementText';
+import { KicadElementFpText, KicadElementGrText, KicadElementText }           from './KicadElementText';
 import { KicadElementComment }                                                from './KicadElementComment';
 import { KicadElementTitleBlock }                                             from './KicadElementTitleBlock';
 import { KicadElementFill }                                                   from './KicadElementFill';
@@ -94,12 +96,15 @@ export class KicadParser {
 		'pin_numbers': KicadElementPinNumbers,
 		'pad': KicadElementPad,
 		'size': KicadElementSize,
+		'drill': KicadElementDrill,
+		'via': KicadElementVia,
 		'wire': KicadElementWire,
 		'junction': KicadElementJunction,
 		'no_connect': KicadElementNoConnect,
 		/** Shapes */
 		'arc': KicadElementArc,
 		'gr_arc': KicadElementGrArc,
+		'fp_arc': KicadElementFpArc,
 		'polyline': KicadElementPolyline,
 		'bezier': KicadElementBezier,
 		'polygon': KicadElementPolygon,
@@ -109,6 +114,7 @@ export class KicadParser {
 		'fp_circle': KicadElementFpCircle,
 		'rectangle': KicadElementRectangle,
 		'gr_rect': KicadElementGrRect,
+		'fp_rect': KicadElementFpRect,
 		'gr_line': KicadElementGrLine,
 		'segment': KicadElementSegment,
 		'gr_curve': KicadElementGrCurve,
@@ -151,6 +157,7 @@ export class KicadParser {
 		'rev': KicadElementRev,
 		'text': KicadElementText,
 		'gr_text': KicadElementGrText,
+		'fp_text': KicadElementFpText,
 		'shape': KicadElementShape,
 		'company': KicadElementCompany,
 		'comment': KicadElementComment,

@@ -1,12 +1,12 @@
-import { WithEffects }              from './Mixins/WithEffects';
-import { WithOrigin }               from './Mixins/WithOrigin';
-import { WithJustify }              from './Mixins/WithJustify';
-import { KicadElementUnlocked }     from './KicadElementBoolean';
-import { KicadElementLayer }        from './KicadElementLayer';
-import { KicadElementUUID }         from './KicadElementUUID';
-import { KicadElement, KicadLayer } from './KicadElement';
+import { WithLayer }            from './Mixins/WithLayer';
+import { WithEffects }          from './Mixins/WithEffects';
+import { WithOrigin }           from './Mixins/WithOrigin';
+import { WithJustify }          from './Mixins/WithJustify';
+import { KicadElementUnlocked } from './KicadElementBoolean';
+import { KicadElementUUID }     from './KicadElementUUID';
+import { KicadElement }         from './KicadElement';
 
-export class KicadElementProperty extends WithOrigin(WithEffects(WithJustify(KicadElement))) {
+export class KicadElementProperty extends WithLayer(WithOrigin(WithEffects(WithJustify(KicadElement)))) {
 	override name = 'property';
 	propertyName?: string;
 	literalName?: boolean;
@@ -29,15 +29,6 @@ export class KicadElementProperty extends WithOrigin(WithEffects(WithJustify(Kic
 			this.addChild(found);
 		}
 		found.value = unlocked;
-	}
-
-	setLayer(layer: KicadLayer) {
-		let found = this.findFirstChildByClass(KicadElementLayer);
-		if (!found) {
-			found = new KicadElementLayer();
-			this.addChild(found);
-		}
-		// found.value = layer;
 	}
 
 	addUuid() {

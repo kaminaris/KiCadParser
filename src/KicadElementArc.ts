@@ -31,3 +31,7 @@ export class KicadElementArc extends WithStartMidEnd(WithStroke(WithFill(KicadEl
 export class KicadElementGrArc extends WithLayer(WithLayerColor(WithStroke(WithStartMidEnd(WithFill(KicadElement))))) {
 	override name = 'gr_arc';
 }
+
+export class KicadElementFpArc extends WithStartMidEnd(WithLayer(WithLayerColor(WithStroke(WithStartMidEnd(WithFill(KicadElement)))))) {
+	override name = 'fp_arc';
+}

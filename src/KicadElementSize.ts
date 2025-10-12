@@ -1,6 +1,8 @@
 import { KicadElement } from './KicadElement';
 
 export class KicadElementSize extends KicadElement {
+	override name = 'size';
+
 	width?: number;
 	height?: number;
 
@@ -17,7 +19,7 @@ export class KicadElementSize extends KicadElement {
 	override afterParse() {
 		if (this.attributes.length > 2) {
 			console.log(this);
-			throw new Error('Size element must have at least one attribute: width and height.');
+			throw new Error(`${this.name} element must have at least one attribute: width and height.`);
 		}
 
 		this.width = this.attributes[0]?.value as number;
@@ -33,6 +35,6 @@ export class KicadElementSize extends KicadElement {
 
 	override write(): string {
 		const h = this.height ? ' ' + this.height : '';
-		return this.pad() + `(size ${ this.width }${ h })`;
+		return this.pad() + `(${this.name} ${ this.width }${ h })`;
 	}
 }
