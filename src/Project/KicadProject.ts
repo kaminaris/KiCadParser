@@ -1,3 +1,4 @@
+import { KicadElementLayers } from '../KicadElementLayers';
 import { KicadElementSheet }  from '../KicadElementSheet';
 import { KicadElementSymbol } from '../KicadElementSymbol';
 import { KicadParser }        from '../KicadParser';
@@ -15,6 +16,16 @@ export interface PathUtils {
 	extname(filePath: string): string;
 
 	isAbsolute(filePath: string): boolean;
+}
+
+export interface SymbolBOMInterface {
+	Reference: string;
+	Value: string;
+	Footprint: string;
+	MPN: string;
+	Qty: number;
+
+	[key: string]: any;
 }
 
 export class KicadSchematic {
@@ -45,6 +56,98 @@ export class KicadSchematic {
 		}
 
 		return symbols;
+	}
+
+	getBOM(recursive?: boolean, includeDnp = false): SymbolBOMInterface[] {
+		const symbols = this.getAllSymbols(recursive).filter((symbol) => {
+			if (includeDnp) {
+				return true;
+			}
+
+			return !symbol.isDnp();
+		});
+
+		const props = symbols.map(v => v.getAllProperties());
+		// Filter all symbols that do not start with '#'
+		const filtered = props.filter(v => {
+			const refProp = v['Reference'];
+			if (!refProp) {
+				return false;
+			}
+			return !refProp.startsWith('#');
+		});
+
+		const output: SymbolBOMInterface[] = [];
+		for (const item of filtered) {
+			if (!item['Value'] || !item['Footprint']) {
+				console.log(`Skipping item with missing Value or Footprint: ${ item['Reference'] }`);
+				continue;
+			}
+
+			let found = output.find(i => i.Value === item['Value'] && i.Footprint === item['Footprint']);
+			if (found) {
+				found.Reference += `, ${ item['Reference'] }`;
+				found.Qty++;
+				// Condense other properties if they are different
+				// TODO: this needs a bit more work
+				for (const key of Object.keys(item)) {
+					if (key === 'Reference' || key === 'Qty') {
+						continue;
+					}
+					if ((found as any)[key] !== item[key]) {
+						(found as any)[key] =
+							(found as any)[key]
+							? `${ (found as any)[key] }, ${ item[key] }`
+							: item[key];
+					}
+				}
+				continue;
+			}
+
+			const newItem: any = {
+				Qty: 1
+			};
+
+			// copy all other properties
+			for (const key of Object.keys(item)) {
+				newItem[key] = item[key];
+			}
+			if (!newItem.MPN) {
+				newItem.MPN = '';
+			}
+
+			output.push(newItem);
+		}
+		// Sort by reference, first R, then C, then L, then U, then alphabetically
+		output.sort((a, b) => {
+			const refA = a.Reference;
+			const refB = b.Reference;
+
+			const prefixA = refA.match(/^[A-Za-z]+/)?.[0] || '';
+			const prefixB = refB.match(/^[A-Za-z]+/)?.[0] || '';
+
+			const order = ['R', 'C', 'L', 'D', 'U'];
+
+			const indexA = order.indexOf(prefixA);
+			const indexB = order.indexOf(prefixB);
+
+			if (indexA === -1 && indexB === -1) {
+				return refA.localeCompare(refB);
+			}
+			if (indexA === -1) {
+				return 1;
+			}
+			if (indexB === -1) {
+				return -1;
+			}
+			if (indexA !== indexB) {
+				return indexA - indexB;
+			}
+
+			return refA.localeCompare(refB);
+		});
+
+		return output;
 	}
 
 	async loadFromPath(schematicPath: string) {
@@ -102,6 +205,23 @@ export class KicadSchematic {
 			await sheet.loadFromPath(sheetPathResolved!);
 			this.sheets.push(sheet);
 		}
+	}
+
+	getAllLayers() {
+		const out: string[] = [];
+		if (!this.rootElement) {
+			return out;
+		}
+
+		const layers = this.rootElement.findFirstChildByClass(KicadElementLayers);
+		if (!layers) {
+			return out;
+		}
+
+		for (const layerAttr of layers.layers) {
+			out.push(layerAttr.name);
+		}
+		return out;
 	}
 }
 

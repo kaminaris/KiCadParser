@@ -1,3 +1,4 @@
+import { KicadElementDnp }        from './KicadElementBoolean';
 import { WithOrigin }             from './Mixins/WithOrigin';
 import { WithProperties }         from './Mixins/WithProperties';
 import { KicadElementUnit }       from './KicadElementNumeric';
@@ -184,5 +185,14 @@ export class KicadElementSymbol extends WithOrigin(WithProperties(KicadElement))
 	getUnitId() {
 		const unit = this.findFirstChildByClass(KicadElementUnit);
 		return unit?.value ?? 0;
+	}
+
+	isDnp() {
+		const dnpChild = this.findFirstChildByClass(KicadElementDnp);
+		if (!dnpChild) {
+			return false;
+		}
+
+		return dnpChild.value;
 	}
 }
