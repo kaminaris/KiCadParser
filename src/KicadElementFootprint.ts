@@ -1,9 +1,10 @@
-import { WithLayer }            from './Mixins/WithLayer';
-import { WithLayerColor }       from './Mixins/WithLayerColor';
-import { WithOrigin }           from './Mixins/WithOrigin';
-import { WithProperties }       from './Mixins/WithProperties';
-import { KicadElement }         from './KicadElement';
-import { KicadElementProperty } from './KicadElementProperty';
+import { KicadElementAttributes } from './KicadElementAttributes';
+import { WithLayer }              from './Mixins/WithLayer';
+import { WithLayerColor }         from './Mixins/WithLayerColor';
+import { WithOrigin }             from './Mixins/WithOrigin';
+import { WithProperties }         from './Mixins/WithProperties';
+import { KicadElement }           from './KicadElement';
+import { KicadElementProperty }   from './KicadElementProperty';
 
 /**
  * (footprint "Button_Switch_THT:KSA_Tactile_SPST"
@@ -259,6 +260,20 @@ import { KicadElementProperty } from './KicadElementProperty';
  */
 export class KicadElementFootprint extends WithOrigin(WithProperties(WithLayer(WithLayerColor(KicadElement)))) {
 
+	override name = 'footprint';
+
+	getFootprintName(): string | undefined {
+		return this.attributes.length > 0 ? this.attributes[0].value as string : undefined;
+	}
+
+	isDnp() {
+		const attrElement = this.findFirstChildByClass(KicadElementAttributes);
+		if (!attrElement) {
+			return false;
+		}
+		return attrElement.hasAttribute('dnp');
+	}
+
 	addBaselineProperties() {
 		/**
 		 * 	 (
@@ -355,4 +370,5 @@ export class KicadElementFootprint extends WithOrigin(WithProperties(WithLayer(W
 		// this.properties.push(datasheetProp);
 		// this.properties.push(descriptionProp);
 	}
+
 }

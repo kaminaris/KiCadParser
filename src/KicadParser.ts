@@ -1,7 +1,8 @@
+import { KicadElementAttributes } from './KicadElementAttributes';
 import {
 	KicadElementBold, KicadElementDnp, KicadElementExcludeFromSim, KicadElementFieldsAutoplaced, KicadElementHide,
 	KicadElementInBom, KicadElementItalic, KicadElementOnBoard, KicadElementUnlocked
-} from './KicadElementBoolean';
+}                                 from './KicadElementBoolean';
 import {
 	KicadElementDiameter, KicadElementIslandAreaMin, KicadElementIslandRemovalMode, KicadElementLength,
 	KicadElementMinThickness,
@@ -11,7 +12,7 @@ import {
 	KicadElementUnit,
 	KicadElementVersion,
 	KicadElementWidth
-} from './KicadElementNumeric';
+}                                 from './KicadElementNumeric';
 import {
 	KicadElementDashedLineDashRatio, KicadElementDashedLineGapRatio, KicadElementHpglPenDiameter
 } from './KicadElementNumericFixed';
@@ -101,6 +102,7 @@ export class KicadParser {
 		'wire': KicadElementWire,
 		'junction': KicadElementJunction,
 		'no_connect': KicadElementNoConnect,
+		'attr': KicadElementAttributes,
 		/** Shapes */
 		'arc': KicadElementArc,
 		'gr_arc': KicadElementGrArc,
