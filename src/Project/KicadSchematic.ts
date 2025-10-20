@@ -29,19 +29,22 @@ export class KicadSchematic extends KicadSExprFile {
 				throw new Error(`Failed to parse schematic path: ${ pathProp }`);
 			}
 			const sheetPath = pathProp.propertyValue as string;
-
 			// check if path is absolute, if not, make it relative to the current schematic
 			const isAbsolute = this.pathUtils?.isAbsolute(sheetPath);
+
 			const sheetPathResolved = this.pathUtils?.resolve(
 				isAbsolute ? sheetPath : this.pathUtils?.join(this.dirname, sheetPath)
 			);
 
-			console.log(`Loading sheet: ${ sheetName } from ${ sheetPathResolved }`);
+			if (!sheetPathResolved) {
+				throw new Error(`Failed to resolve schematic path: ${ sheetPath }`);
+			}
 			const sheet = new KicadSchematic();
 			sheet.name = sheetName as string;
 			sheet.path = sheetPath;
+			sheet.pathUtils = this.pathUtils;
 			sheet.loadFile = this.loadFile;
-			await sheet.loadFromPath(sheetPathResolved!);
+			await sheet.loadFromPath(sheetPathResolved);
 			this.sheets.push(sheet);
 		}
 	}
