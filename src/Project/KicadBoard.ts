@@ -1,5 +1,5 @@
-import { KicadElementFootprint } from 'src/app/Lib/Kicad/src/KicadElementFootprint';
-import { SymbolBOMInterface }    from 'src/app/Lib/Kicad/src/Project/SymbolBOMInterface';
+import { KicadElementFootprint } from '../KicadElementFootprint';
+import { SymbolBOMInterface }    from './SymbolBOMInterface';
 import { KicadElementLayers }    from '../KicadElementLayers';
 import { KicadSExprFile }        from './KicadSExprFile';
 

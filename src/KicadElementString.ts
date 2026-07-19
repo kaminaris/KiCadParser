@@ -64,3 +64,15 @@ export class KicadElementReference extends KicadElementString {
 export class KicadElementNetName extends KicadElementString {
 	override name = 'net_name';
 }
+
+export class KicadElementPinType extends KicadElementString {
+	override name = 'pintype';
+}
+
+export class KicadElementPinFunction extends KicadElementString {
+	override name = 'pinfunction';
+}
+
+export class KicadElementNetTiePadGroups extends KicadElementString {
+	override name = 'net_tie_pad_groups';
+}

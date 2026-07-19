@@ -1,8 +1,9 @@
 import { KicadElementPts } from './KicadElementPts';
 import { KicadElementXY }  from './KicadElementXY';
+import { WithUUID }        from './Mixins/WithUUID';
 import { KicadElement }    from './KicadElement';
 
-export class KicadElementWire extends KicadElement {
+export class KicadElementWire extends WithUUID(KicadElement) {
 	override name = 'wire';
 
 	getPoints(): Array<{ x: number, y: number }> {

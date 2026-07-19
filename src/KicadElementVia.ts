@@ -3,6 +3,7 @@ import { WithLayerColor } from './Mixins/WithLayerColor';
 import { WithLayers }   from './Mixins/WithLayers';
 import { WithOrigin }   from './Mixins/WithOrigin';
 import { WithSize }     from './Mixins/WithSize';
+import { WithUUID }     from './Mixins/WithUUID';
 import { KicadElement } from './KicadElement';
 
 /**
@@ -15,6 +16,6 @@ import { KicadElement } from './KicadElement';
  * 		(uuid "d5f1c43f-4596-4bdc-96cb-75d477aee2df")
  * 	)
  */
-export class KicadElementVia extends WithSize(WithOrigin(WithDrill(WithLayers(WithLayerColor(KicadElement))))) {
+export class KicadElementVia extends WithUUID(WithSize(WithOrigin(WithDrill(WithLayers(WithLayerColor(KicadElement)))))) {
 	override name = 'via';
 }

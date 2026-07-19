@@ -6,6 +6,7 @@ import { WithCenter }     from './Mixins/WithCenter';
 import { WithEnd }        from './Mixins/WithEnd';
 import { WithLayer }      from './Mixins/WithLayer';
 import { WithStroke }     from './Mixins/WithStroke';
+import { WithUUID }       from './Mixins/WithUUID';
 
 /**
  * (circle
@@ -15,7 +16,7 @@ import { WithStroke }     from './Mixins/WithStroke';
  * 	(fill (type none))
  * )
  */
-export class KicadElementCircle extends WithStroke(WithFill(WithCenter(WithRadius(KicadElement)))) {
+export class KicadElementCircle extends WithUUID(WithStroke(WithFill(WithCenter(WithRadius(KicadElement))))) {
 	override name = 'circle';
 
 	constructor(
@@ -30,11 +31,11 @@ export class KicadElementCircle extends WithStroke(WithFill(WithCenter(WithRadiu
 	}
 }
 
-export class KicadElementGrCircle extends WithLayer(WithLayerColor(WithStroke(WithEnd(WithCenter(KicadElement))))) {
+export class KicadElementGrCircle extends WithUUID(WithLayer(WithLayerColor(WithStroke(WithEnd(WithCenter(KicadElement)))))) {
 	override name = 'gr_circle';
 }
 
-export class KicadElementFpCircle extends WithLayer(WithLayerColor(WithStroke(WithEnd(WithCenter(KicadElement))))) {
+export class KicadElementFpCircle extends WithUUID(WithLayer(WithLayerColor(WithStroke(WithEnd(WithCenter(KicadElement)))))) {
 	override name = 'fp_circle';
 
 	constructor(centerX?: number, centerY?: number, radius?: number) {

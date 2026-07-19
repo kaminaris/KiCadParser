@@ -2,11 +2,22 @@ import { KicadElement } from './KicadElement';
 
 /**
  * (in_bom yes)
+ *
+ * Some older KiCad versions wrote certain flags (e.g. fields_autoplaced) as a
+ * bare presence marker with no value at all - `(fields_autoplaced)` - where
+ * the element merely existing means true. We're targeting KiCad 9/10, so
+ * rather than preserve that legacy shape, we read it (presence means true)
+ * and always write the modern `(name yes)`/`(name no)` form.
  */
 export class KicadElementBoolean extends KicadElement {
 	value: boolean = false;
 
 	override afterParse() {
+		if (this.attributes.length === 0) {
+			this.value = true;
+			return;
+		}
+
 		if (this.attributes.length !== 1) {
 			throw new Error(`${ this.name } expects exactly one attribute, got ${ this.attributes.length }`);
 		}

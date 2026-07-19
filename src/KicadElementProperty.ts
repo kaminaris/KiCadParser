@@ -2,11 +2,11 @@ import { WithLayer }                              from './Mixins/WithLayer';
 import { WithEffects }                            from './Mixins/WithEffects';
 import { WithOrigin }                             from './Mixins/WithOrigin';
 import { WithJustify }                            from './Mixins/WithJustify';
+import { WithUUID }                               from './Mixins/WithUUID';
 import { KicadElementHide, KicadElementUnlocked } from './KicadElementBoolean';
-import { KicadElementUUID }                       from './KicadElementUUID';
 import { KicadElement }                           from './KicadElement';
 
-export class KicadElementProperty extends WithLayer(WithOrigin(WithEffects(WithJustify(KicadElement)))) {
+export class KicadElementProperty extends WithUUID(WithLayer(WithOrigin(WithEffects(WithJustify(KicadElement))))) {
 	override name = 'property';
 	propertyName?: string;
 	literalName?: boolean;
@@ -31,10 +31,9 @@ export class KicadElementProperty extends WithLayer(WithOrigin(WithEffects(WithJ
 		found.value = unlocked;
 	}
 
+	/** @deprecated use setUuid() (from WithUUID) instead */
 	addUuid() {
-		const uuid = crypto.randomUUID();
-		const newUuidElement = new KicadElementUUID(uuid);
-		this.children.push(newUuidElement);
+		this.setUuid();
 	}
 
 	override isHidden(): boolean {

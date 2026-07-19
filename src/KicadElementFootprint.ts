@@ -3,6 +3,7 @@ import { WithLayer }              from './Mixins/WithLayer';
 import { WithLayerColor }         from './Mixins/WithLayerColor';
 import { WithOrigin }             from './Mixins/WithOrigin';
 import { WithProperties }         from './Mixins/WithProperties';
+import { WithUUID }               from './Mixins/WithUUID';
 import { KicadElement }           from './KicadElement';
 import { KicadElementProperty }   from './KicadElementProperty';
 
@@ -258,7 +259,7 @@ import { KicadElementProperty }   from './KicadElementProperty';
  * 		)
  * 	)
  */
-export class KicadElementFootprint extends WithOrigin(WithProperties(WithLayer(WithLayerColor(KicadElement)))) {
+export class KicadElementFootprint extends WithUUID(WithOrigin(WithProperties(WithLayer(WithLayerColor(KicadElement))))) {
 
 	override name = 'footprint';
 

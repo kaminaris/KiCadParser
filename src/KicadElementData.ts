@@ -28,7 +28,7 @@ export class KicadElementData extends KicadElement {
 			combined += attribute.value as string;
 		}
 		// this.attributes.length = 0;
-		this.data = window.atob(combined);
+		this.data = atob(combined);
 	}
 
 	escapeDataLine(line: string, index: number): string {
@@ -53,7 +53,7 @@ export class KicadElementData extends KicadElement {
 			throw new Error('No data to write');
 		}
 
-		const base64String = window.btoa(this.data);
+		const base64String = btoa(this.data);
 		const maxLineLength = 76;
 		const lines = [];
 		for (let i = 0; i < base64String.length; i += maxLineLength) {

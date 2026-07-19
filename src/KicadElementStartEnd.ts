@@ -5,8 +5,9 @@ import { WithFill }       from './Mixins/WithFill';
 import { WithStartEnd }   from './Mixins/WithStartEnd';
 import { WithStroke }     from './Mixins/WithStroke';
 import { WithLayer }      from './Mixins/WithLayer';
+import { WithUUID }       from './Mixins/WithUUID';
 
-export class KicadElementRectangle extends WithStartEnd(WithFill(WithStroke(KicadElement))) {
+export class KicadElementRectangle extends WithUUID(WithStartEnd(WithFill(WithStroke(KicadElement)))) {
 	override name = 'rectangle';
 
 	constructor(sX: number, sY: number, eX: number, eY: number) {
@@ -15,24 +16,24 @@ export class KicadElementRectangle extends WithStartEnd(WithFill(WithStroke(Kica
 	}
 }
 
-export class KicadElementGrLine extends WithLayer(WithLayerColor(WithStartEnd(WithFill(WithStroke(KicadElement))))) {
+export class KicadElementGrLine extends WithUUID(WithLayer(WithLayerColor(WithStartEnd(WithFill(WithStroke(KicadElement)))))) {
 	override name = 'gr_line';
 }
 
-export class KicadElementSegment extends WithLayer(
-	WithLayerColor(WithStartEnd(WithFill(WithStroke(WithWidth(KicadElement)))))) {
+export class KicadElementSegment extends WithUUID(WithLayer(
+	WithLayerColor(WithStartEnd(WithFill(WithStroke(WithWidth(KicadElement))))))) {
 	override name = 'segment';
 }
 
-export class KicadElementGrRect extends WithLayer(WithLayerColor(WithStartEnd(WithFill(WithStroke(KicadElement))))) {
+export class KicadElementGrRect extends WithUUID(WithLayer(WithLayerColor(WithStartEnd(WithFill(WithStroke(KicadElement)))))) {
 	override name = 'gr_rect';
 }
 
-export class KicadElementFpRect extends WithLayer(WithLayerColor(WithStartEnd(WithFill(WithStroke(KicadElement))))) {
+export class KicadElementFpRect extends WithUUID(WithLayer(WithLayerColor(WithStartEnd(WithFill(WithStroke(KicadElement)))))) {
 	override name = 'fp_rect';
 }
 
-export class KicadElementFpLine extends WithLayer(WithStroke(WithStartEnd(KicadElement))) {
+export class KicadElementFpLine extends WithUUID(WithLayer(WithStroke(WithStartEnd(KicadElement)))) {
 	override name = 'fp_line';
 
 	constructor(startX?: number, startY?: number, endX?: number, endY?: number) {

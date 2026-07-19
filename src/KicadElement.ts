@@ -81,6 +81,30 @@ export class KicadElement {
 		return found;
 	}
 
+	findOrCreateChildByName(name: string): KicadElement {
+		let found = this.findFirstChildByName(name);
+		if (!found) {
+			found = new KicadElement();
+			found.name = name;
+			this.addChild(found);
+		}
+		return found;
+	}
+
+	/**
+	 * Convenience for single-attribute leaf children that don't have their own
+	 * dedicated class (e.g. `(material "SM-001")`, `(epsilon_r 3.8)`).
+	 */
+	setSimpleChild(name: string, value: string | number | boolean, format: KicadAttribute['format']): KicadElement {
+		const child = this.findOrCreateChildByName(name);
+		child.setAttribute({ value, format }, 0);
+		return child;
+	}
+
+	getSimpleChildValue(name: string): string | number | boolean | undefined {
+		return this.findFirstChildByName(name)?.attributes[0]?.value;
+	}
+
 	findAllChildrenByClass<T extends KicadElement>(cls: new (...args: any[]) => T): T[] {
 		let results: T[] = [];
 		for (const child of this.children) {

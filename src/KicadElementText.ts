@@ -3,9 +3,10 @@ import { WithOrigin }     from './Mixins/WithOrigin';
 import { WithEffects }    from './Mixins/WithEffects';
 import { WithJustify }    from './Mixins/WithJustify';
 import { WithLayer }      from './Mixins/WithLayer';
+import { WithUUID }       from './Mixins/WithUUID';
 import { KicadElement }   from './KicadElement';
 
-export class KicadElementTextBase extends WithOrigin(WithEffects(WithJustify(KicadElement))) {
+export class KicadElementTextBase extends WithUUID(WithOrigin(WithEffects(WithJustify(KicadElement)))) {
 	value: string = '';
 
 	constructor(v?: string) {

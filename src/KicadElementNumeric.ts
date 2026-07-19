@@ -71,3 +71,7 @@ export class KicadElementUnit extends KicadElementNumeric {
 export class KicadElementLength extends KicadElementNumeric {
 	override name = 'length';
 }
+
+export class KicadElementZoneConnect extends KicadElementNumeric {
+	override name = 'zone_connect';
+}

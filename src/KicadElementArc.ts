@@ -4,6 +4,7 @@ import { WithFill }        from './Mixins/WithFill';
 import { WithLayer }       from './Mixins/WithLayer';
 import { WithStartMidEnd } from './Mixins/WithStartMidEnd';
 import { WithStroke }      from './Mixins/WithStroke';
+import { WithUUID }        from './Mixins/WithUUID';
 
 /**
  * (arc
@@ -28,10 +29,10 @@ export class KicadElementArc extends WithStartMidEnd(WithStroke(WithFill(KicadEl
  * 		(uuid "7a69040a-f568-4551-9a51-2ee12c0d7be7")
  * 	)
  */
-export class KicadElementGrArc extends WithLayer(WithLayerColor(WithStroke(WithStartMidEnd(WithFill(KicadElement))))) {
+export class KicadElementGrArc extends WithUUID(WithLayer(WithLayerColor(WithStroke(WithStartMidEnd(WithFill(KicadElement)))))) {
 	override name = 'gr_arc';
 }
 
-export class KicadElementFpArc extends WithStartMidEnd(WithLayer(WithLayerColor(WithStroke(WithStartMidEnd(WithFill(KicadElement)))))) {
+export class KicadElementFpArc extends WithUUID(WithStartMidEnd(WithLayer(WithLayerColor(WithStroke(WithStartMidEnd(WithFill(KicadElement))))))) {
 	override name = 'fp_arc';
 }

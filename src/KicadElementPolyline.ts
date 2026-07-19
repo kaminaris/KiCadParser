@@ -4,6 +4,7 @@ import { WithFill }       from './Mixins/WithFill';
 import { WithLayer }      from './Mixins/WithLayer';
 import { WithPts }        from './Mixins/WithPts';
 import { WithStroke }     from './Mixins/WithStroke';
+import { WithUUID }       from './Mixins/WithUUID';
 
 /**
  * (polyline
@@ -14,7 +15,7 @@ import { WithStroke }     from './Mixins/WithStroke';
  * 	(fill (type none))
  * )
  */
-export class KicadElementPolyline extends WithPts(WithStroke(WithFill(KicadElement))) {
+export class KicadElementPolyline extends WithUUID(WithPts(WithStroke(WithFill(KicadElement)))) {
 	override name = 'polyline';
 }
 
@@ -28,7 +29,7 @@ export class KicadElementPolyline extends WithPts(WithStroke(WithFill(KicadEleme
  * 	(uuid d14c3946-d818-4e0a-9944-0b0722dae728)
  * )
  */
-export class KicadElementBezier extends WithPts(WithStroke(WithFill(KicadElement))) {
+export class KicadElementBezier extends WithUUID(WithPts(WithStroke(WithFill(KicadElement)))) {
 	override name = 'bezier';
 }
 
@@ -42,6 +43,6 @@ export class KicadElementBezier extends WithPts(WithStroke(WithFill(KicadElement
  * 		(uuid "5cf110ae-254e-4f09-aaa3-a08317319d78")
  * 	)
  */
-export class KicadElementGrCurve extends WithLayer(WithLayerColor(WithPts(WithStroke(WithFill(KicadElement))))) {
+export class KicadElementGrCurve extends WithUUID(WithLayer(WithLayerColor(WithPts(WithStroke(WithFill(KicadElement)))))) {
 	override name = 'gr_curve';
 }

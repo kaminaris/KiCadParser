@@ -11,18 +11,20 @@ import {
 	KicadElementThickness,
 	KicadElementUnit,
 	KicadElementVersion,
-	KicadElementWidth
+	KicadElementWidth,
+	KicadElementZoneConnect
 }                                 from './KicadElementNumeric';
 import {
 	KicadElementDashedLineDashRatio, KicadElementDashedLineGapRatio, KicadElementHpglPenDiameter
 } from './KicadElementNumericFixed';
 import {
 	KicadElementCompany, KicadElementDate, KicadElementFace, KicadElementGenerator, KicadElementGeneratorVersion,
-	KicadElementLibId, KicadElementNetName, KicadElementReference,
+	KicadElementLibId, KicadElementNetName, KicadElementNetTiePadGroups, KicadElementPinFunction,
+	KicadElementPinType, KicadElementReference,
 	KicadElementRev, KicadElementTitle
 } from './KicadElementString';
 import {
-	KicadElementCenter, KicadElementEnd, KicadElementMid, KicadElementStart, KicadElementXY
+	KicadElementCenter, KicadElementEnd, KicadElementMid, KicadElementStart, KicadElementXY, KicadElementXYZ
 } from './KicadElementXY';
 
 import {
@@ -32,7 +34,7 @@ import {
 
 import { KicadElementDrill }                                                  from './KicadElementDrill';
 import { KicadElementVia }                                                    from './KicadElementVia';
-import { KicadElementFilledPolygon, KicadElementGrPoly, KicadElementPolygon } from './KicadElementPolygon';
+import { KicadElementFilledPolygon, KicadElementFpPoly, KicadElementGrPoly, KicadElementPolygon } from './KicadElementPolygon';
 import { KicadElementCircle, KicadElementFpCircle, KicadElementGrCircle }     from './KicadElementCircle';
 import { KicadElementBezier, KicadElementGrCurve, KicadElementPolyline }      from './KicadElementPolyline';
 import { KicadElementArc, KicadElementFpArc, KicadElementGrArc }              from './KicadElementArc';
@@ -62,7 +64,7 @@ import { KicadElementEffects }                                                fr
 import { KicadElementFont }                                                   from './KicadElementFont';
 import { KicadElementJustify }                                                from './KicadElementJustify';
 import { KicadElementLibSymbols }                                             from './KicadElementLibSymbols';
-import { KicadElementOffset }                                                 from './KicadElementOffset';
+import { KicadElementOffset, KicadElementRotate, KicadElementScale }         from './KicadElementOffset';
 import { KicadElementPin }                                                    from './KicadElementPin';
 import { KicadElementProperty }                                               from './KicadElementProperty';
 import { KicadElementPts }                                                    from './KicadElementPts';
@@ -72,6 +74,20 @@ import { KicadElementStroke }                                                 fr
 import { KicadElementSymbol }                                                 from './KicadElementSymbol';
 import { KicadElementType }                                                   from './KicadElementType';
 import { KicadElementUUID }                                                   from './KicadElementUUID';
+import { KicadElementModel }                                                  from './KicadElementModel';
+import { KicadElementImage }                                                  from './KicadElementImage';
+import { KicadElementDimension }                                              from './KicadElementDimension';
+import {
+	KicadElementInstanceProject, KicadElementInstancePath, KicadElementInstances
+}                                                                              from './KicadElementInstances';
+import { KicadElementSetup, KicadElementStackup }                             from './KicadElementSetup';
+import { KicadElementPins }                                                   from './KicadElementPins';
+import { KicadElementBus, KicadElementBusEntry }                              from './KicadElementBus';
+import { KicadElementHierarchicalLabel }                                      from './KicadElementHierarchicalLabel';
+import { KicadElementGroup }                                                  from './KicadElementGroup';
+import { KicadElementComponentClass, KicadElementComponentClasses }          from './KicadElementComponentClass';
+import { KicadElementRuleArea }                                              from './KicadElementRuleArea';
+import { KicadElementNetclassFlag }                                          from './KicadElementNetclassFlag';
 import { KicadElement }                                                       from './KicadElement';
 
 export type KicadToken = { type: 'paren' | 'string' | 'number' | 'symbol', value: string };
@@ -123,6 +139,7 @@ export class KicadParser {
 		'zone': KicadElementZone,
 		'fp_line': KicadElementFpLine,
 		'filled_polygon': KicadElementFilledPolygon,
+		'fp_poly': KicadElementFpPoly,
 
 		/** Points and coordinates */
 		'start': KicadElementStart,
@@ -131,6 +148,7 @@ export class KicadParser {
 		'end': KicadElementEnd,
 		'at': KicadElementAt,
 		'xy': KicadElementXY,
+		'xyz': KicadElementXYZ,
 		'unit': KicadElementUnit,
 		/** numbers */
 		'number': KicadElementNumber,
@@ -144,8 +162,11 @@ export class KicadParser {
 		'island_area_min': KicadElementIslandAreaMin,
 		'radius': KicadElementRadius,
 		'length': KicadElementLength,
+		'zone_connect': KicadElementZoneConnect,
 		'color': KicadElementColor,
 		'data': KicadElementData,
+		'scale': KicadElementScale,
+		'rotate': KicadElementRotate,
 		/** Fixed precision numbers, not sure if it is intended */
 		'dashed_line_dash_ratio': KicadElementDashedLineDashRatio,
 		'dashed_line_gap_ratio': KicadElementDashedLineGapRatio,
@@ -156,6 +177,9 @@ export class KicadParser {
 		'title': KicadElementTitle,
 		'date': KicadElementDate,
 		'net_name': KicadElementNetName,
+		'net_tie_pad_groups': KicadElementNetTiePadGroups,
+		'pintype': KicadElementPinType,
+		'pinfunction': KicadElementPinFunction,
 		'rev': KicadElementRev,
 		'text': KicadElementText,
 		'gr_text': KicadElementGrText,
@@ -186,7 +210,38 @@ export class KicadParser {
 		'fields_autoplaced': KicadElementFieldsAutoplaced,
 		'unlocked': KicadElementUnlocked,
 		'hide': KicadElementHide,
-		'pin': KicadElementPin
+		'pin': KicadElementPin,
+
+		/** Structural containers */
+		'model': KicadElementModel,
+		'image': KicadElementImage,
+		'dimension': KicadElementDimension,
+		'instances': KicadElementInstances,
+		'project': KicadElementInstanceProject,
+		'path': KicadElementInstancePath,
+		'setup': KicadElementSetup,
+		'pins': KicadElementPins,
+		'bus': KicadElementBus,
+		'bus_entry': KicadElementBusEntry,
+		'hierarchical_label': KicadElementHierarchicalLabel,
+		'group': KicadElementGroup,
+		'component_classes': KicadElementComponentClasses,
+		'component_class': KicadElementComponentClass,
+		'rule_area': KicadElementRuleArea,
+		'netclass_flag': KicadElementNetclassFlag,
+		'stackup': KicadElementStackup
+	};
+
+	/**
+	 * Some element names are reused for unrelated structures depending on their parent
+	 * (e.g. `(unit 1)` for a symbol instance's unit number vs. the KiCad 10 footprint
+	 * `(units (unit (name "A") (pins "1" "2")))` jumper definition). This map lets a
+	 * parent element name override the class used for a given child name.
+	 */
+	contextualNodeMap: { [parentName: string]: { [name: string]: any } } = {
+		'units': {
+			'unit': KicadElement
+		}
 	};
 
 	tokenizeKicad(text: string): KicadToken[] {
@@ -212,11 +267,12 @@ export class KicadParser {
 		return tokens;
 	}
 
-	newElement(name: string): KicadElement {
+	newElement(name: string, parentName?: string): KicadElement {
 		let el: KicadElement;
 
-		if (name in this.nodeMap) {
-			const Cls = this.nodeMap[name];
+		const Cls = (parentName && this.contextualNodeMap[parentName]?.[name]) || this.nodeMap[name];
+
+		if (Cls) {
 			el = new Cls();
 		}
 		else {
@@ -227,18 +283,18 @@ export class KicadParser {
 		return el;
 	}
 
-	parseElement(): KicadElement {
+	parseElement(parentName?: string): KicadElement {
 		if (this.tokens[this.i].type === 'paren' && this.tokens[this.i].value === '(') {
 			this.i++;
 			const nameToken = this.tokens[this.i++];
-			const element = this.newElement(nameToken.value);
+			const element = this.newElement(nameToken.value, parentName);
 
 			// Parse attributes and children
 			while (this.i < this.tokens.length &&
 			!(this.tokens[this.i].type === 'paren' && this.tokens[this.i].value === ')')) {
 				// If next token is an opening parenthesis, it's a child element
 				if (this.tokens[this.i].type === 'paren' && this.tokens[this.i].value === '(') {
-					element.addChild(this.parseElement());
+					element.addChild(this.parseElement(nameToken.value));
 				}
 				// Otherwise it's an attribute - preserve type
 				else {

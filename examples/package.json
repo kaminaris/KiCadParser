@@ -1,0 +1,18 @@
+{
+  "name": "kicad-parser-examples",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "yarn@4.17.1",
+  "scripts": {
+    "01": "tsx 01-parse-schematic.ts",
+    "02": "tsx 02-parse-board.ts",
+    "03": "tsx 03-modify-schematic.ts",
+    "04": "tsx 04-build-stackup-from-scratch.ts",
+    "05": "tsx 05-load-hierarchical-project.ts",
+    "06": "tsx 06-add-footprint-with-3d-model.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.5.4"
+  }
+}

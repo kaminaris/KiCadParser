@@ -1,13 +1,14 @@
 import { KicadElementDnp }        from './KicadElementBoolean';
 import { WithOrigin }             from './Mixins/WithOrigin';
 import { WithProperties }         from './Mixins/WithProperties';
+import { WithUUID }               from './Mixins/WithUUID';
 import { KicadElementUnit }       from './KicadElementNumeric';
 import { KicadElementLibId }      from './KicadElementString';
 import { KicadElementPinNumbers } from './KicadElementPinNumbers';
 import { KicadElement }           from './KicadElement';
 import { KicadElementProperty }   from './KicadElementProperty';
 
-export class KicadElementSymbol extends WithOrigin(WithProperties(KicadElement)) {
+export class KicadElementSymbol extends WithUUID(WithOrigin(WithProperties(KicadElement))) {
 	override name = 'symbol';
 	symbolName?: string;
 

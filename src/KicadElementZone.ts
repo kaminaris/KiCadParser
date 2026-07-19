@@ -3,6 +3,7 @@ import { KicadElementLayers }                             from './KicadElementLa
 import { KicadElementFilledPolygon, KicadElementPolygon } from './KicadElementPolygon';
 import { KicadElementNetName }                            from './KicadElementString';
 import { WithLayerColor }                                 from './Mixins/WithLayerColor';
+import { WithUUID }                                       from './Mixins/WithUUID';
 import { KicadElement }                                   from './KicadElement';
 
 /**
@@ -36,7 +37,7 @@ import { KicadElement }                                   from './KicadElement';
  * 		)
  * 	)
  */
-export class KicadElementZone extends WithLayerColor(KicadElement) {
+export class KicadElementZone extends WithUUID(WithLayerColor(KicadElement)) {
 	value: string = 'polygon';
 
 	isKeepOut() {

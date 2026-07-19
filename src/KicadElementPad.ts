@@ -3,6 +3,7 @@ import { KicadElementLayers } from './KicadElementLayers';
 import { WithOrigin }         from './Mixins/WithOrigin';
 import { KicadElement }       from './KicadElement';
 import { WithSize }           from './Mixins/WithSize';
+import { WithUUID }           from './Mixins/WithUUID';
 
 export type KicadPadShape = 'oval' | 'rect' | 'trapezoid' | 'circle' | 'roundrect';
 export const KicadPadShapes: KicadPadShape[] = ['oval', 'rect', 'trapezoid', 'circle', 'roundrect'];
@@ -17,7 +18,7 @@ export const KicadPadShapes: KicadPadShape[] = ['oval', 'rect', 'trapezoid', 'ci
  * 		(uuid "ada9ba87-9a30-451a-9527-e65964eac081")
  * 	)
  */
-export class KicadElementPad extends WithDrill(WithSize(WithOrigin(KicadElement))) {
+export class KicadElementPad extends WithUUID(WithDrill(WithSize(WithOrigin(KicadElement)))) {
 	override name = 'pad';
 
 	padNumber = '1';

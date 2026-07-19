@@ -1,4 +1,4 @@
-import { SymbolBOMInterface } from 'src/app/Lib/Kicad/src/Project/SymbolBOMInterface';
+import { SymbolBOMInterface } from './SymbolBOMInterface';
 import { KicadElement }       from '../KicadElement';
 import { KicadParser }        from '../KicadParser';
 import { PathUtils }          from './PathUtils';
