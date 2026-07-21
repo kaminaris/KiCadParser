@@ -4,6 +4,7 @@ import { WithOrigin }                             from './Mixins/WithOrigin';
 import { WithJustify }                            from './Mixins/WithJustify';
 import { WithUUID }                               from './Mixins/WithUUID';
 import { KicadElementHide, KicadElementUnlocked } from './KicadElementBoolean';
+import { KicadElementEffects } from './KicadElementEffects';
 import { KicadElement }                           from './KicadElement';
 
 export class KicadElementProperty extends WithUUID(WithLayer(WithOrigin(WithEffects(WithJustify(KicadElement))))) {
@@ -37,8 +38,14 @@ export class KicadElementProperty extends WithUUID(WithLayer(WithOrigin(WithEffe
 	}
 
 	override isHidden(): boolean {
+		// KiCad stores (hide yes) either as a direct child or nested
+		// inside (effects ... (hide yes)). Check both paths.
 		const hideChild = this.findFirstChildByClass(KicadElementHide);
-		return hideChild ? hideChild.value : false;
+		if (hideChild) {
+			return hideChild.value;
+		}
+		const effects = this.findFirstChildByClass(KicadElementEffects);
+		return effects ? effects.isHidden() : false;
 	}
 
 	override afterParse() {
