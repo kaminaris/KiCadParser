@@ -67,12 +67,49 @@ export function WithStartMidEnd<T extends Ctor<KicadElement>>(Base: T) {
 
 			const radius = Math.hypot(ax - centerX, ay - centerY);
 
-			const startAngle = Math.atan2(ay - centerY, ax - centerX);
-			let endAngle = Math.atan2(cy - centerY, cx - centerX);
+			const angleOf = (x: number, y: number) => Math.atan2(y - centerY, x - centerX);
+			const rawStartAngle = angleOf(ax, ay);
+			const rawMidAngle = angleOf(bx, by);
+			const rawEndAngle = angleOf(cx, cy);
 
-			// Only enforce clockwise direction for schematics (not symbols)
-			if (!invert && endAngle > startAngle) {
-				endAngle -= 2 * Math.PI;
+			// Two arcs connect start to end; only one of them actually passes
+			// through mid. The renderer always sweeps FORWARD (increasing
+			// angle — schematic/board space is Y-down, so increasing angle is
+			// clockwise on screen, matching canvas's own default arc()
+			// direction), so pick whichever of {start→end, end→start} — as a
+			// forward sweep — reaches mid before it reaches its own opposite
+			// endpoint.
+			//
+			// A previous version picked direction from a fixed "assume
+			// clockwise, subtract 2π if end > start" rule using only
+			// start/end, never checking mid at all. For a half-circle (180°)
+			// arc specifically this is a real coin-flip: the correct arc and
+			// its exact opposite (bulging the other way) both connect the
+			// same two endpoints, and the old rule picked whichever one
+			// start/end's raw atan2 values happened to produce — confirmed
+			// via a real symbol with two mirror-image 180° arcs where one
+			// rendered correctly and the other rendered as if rotated 180°.
+			const normalize = (a: number) => ((a % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+			const forward = (from: number, to: number) => normalize(to - from);
+
+			const forwardStartToMid = forward(rawStartAngle, rawMidAngle);
+			const forwardStartToEnd = forward(rawStartAngle, rawEndAngle);
+
+			let startAngle: number;
+			let endAngle: number;
+			if (forwardStartToMid < forwardStartToEnd) {
+				// The forward sweep from start already reaches mid before end.
+				startAngle = rawStartAngle;
+				endAngle = rawStartAngle + forwardStartToEnd;
+			}
+			else {
+				// It doesn't — the correct arc is the complementary one, drawn
+				// as a forward sweep starting from `end` instead (the shape
+				// drawn is identical either way; only which literal endpoint
+				// is labeled "start" changes, which nothing downstream relies
+				// on for correctness, only for sweep direction).
+				startAngle = rawEndAngle;
+				endAngle = rawEndAngle + (2 * Math.PI - forwardStartToEnd);
 			}
 
 			return { centerX, centerY, radius, startAngle, endAngle };

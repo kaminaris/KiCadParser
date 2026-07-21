@@ -253,8 +253,18 @@ export class KicadParser {
 				tokens.push({ type: 'paren', value: match[0] });
 			}
 			else if (match[1] !== undefined) {
-				// Replace escaped quotes with actual quotes in the stored value
-				const stringValue = match[1].replace(/\\"/g, '"');
+				// Unescape quotes/newlines/backslashes the same way KiCad's own
+				// string serializer escapes them on write (confirmed against
+				// kicanvas's tokenizer, src/kicad/tokenizer.ts — a schematic
+				// `text` item with an embedded line break is stored as a
+				// literal two-character `\n` sequence, not a real newline
+				// byte, since the S-expression format can't otherwise
+				// round-trip one inside a single quoted token). Order matches
+				// kicanvas: newlines before the trailing backslash unescape.
+				const stringValue = match[1]
+					.replace(/\\"/g, '"')
+					.replace(/\\n/g, '\n')
+					.replace(/\\\\/g, '\\');
 				tokens.push({ type: 'string', value: stringValue });
 			}
 			else if (!isNaN(Number(match[0]))) {
