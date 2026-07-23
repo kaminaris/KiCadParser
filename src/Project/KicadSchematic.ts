@@ -1,10 +1,39 @@
-import { KicadElementSheet }  from '../KicadElementSheet';
-import { KicadElementSymbol } from '../KicadElementSymbol';
-import { KicadSExprFile }     from './KicadSExprFile';
-import { SymbolBOMInterface } from './SymbolBOMInterface';
+import { KicadElementUUID }                                    from '../KicadElementUUID';
+import { KicadElementSheet }                                   from '../KicadElementSheet';
+import { KicadElementSymbol }                                  from '../KicadElementSymbol';
+import { KicadElement }                                        from '../KicadElement';
+import { KicadElementVersion }                                 from '../KicadElementNumeric';
+import { KicadElementGenerator, KicadElementGeneratorVersion } from '../KicadElementString';
+import { KicadSExprFile }                                      from './KicadSExprFile';
+import { SymbolBOMInterface }                                  from './SymbolBOMInterface';
 
 export class KicadSchematic extends KicadSExprFile {
 	sheets: KicadSchematic[] = [];
+
+	/** Creates a blank (kicad_sch …) root element. */
+	static createBlank(): KicadElement {
+		const root = new KicadElement();
+		root.name = 'kicad_sch';
+
+		const ver = new KicadElementVersion(20260306);
+		root.children.push(ver);
+
+		const gen = new KicadElementGenerator('eeschema');
+		root.children.push(gen);
+
+		const genVer = new KicadElementGeneratorVersion('10.0');
+		root.children.push(genVer);
+
+		const uuid = new KicadElementUUID();
+		root.children.push(uuid);
+
+		const paper = new KicadElement();
+		paper.name = 'paper';
+		paper.setAttribute({ value: 'A4', format: 'quoted' });
+		root.children.push(paper);
+
+		return root;
+	}
 
 	override async loadFromPath(filePath: string): Promise<void> {
 		await super.loadFromPath(filePath);
