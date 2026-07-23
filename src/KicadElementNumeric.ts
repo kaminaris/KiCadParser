@@ -20,7 +20,7 @@ export abstract class KicadElementNumeric extends KicadElement {
 	}
 
 	override write(): string {
-		return this.pad() + `(${ this.name } ${ this.value })`;
+		return this.pad() + `(${ this.name } ${ this.round(this.value) })`;
 	}
 }
 

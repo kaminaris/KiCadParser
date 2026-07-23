@@ -39,7 +39,9 @@ export class KicadElementAt extends KicadElement {
 	}
 
 	override write(): string {
-		const h = typeof this.rotation === 'undefined' ? '' : (' ' + this.rotation);
-		return this.pad() + `(at ${ this.x } ${ this.y }${ h })`;
+		const x = this.round(this.x);
+		const y = this.round(this.y);
+		const h = typeof this.rotation === 'undefined' ? '' : (' ' + this.round(this.rotation));
+		return this.pad() + `(at ${ x } ${ y }${ h })`;
 	}
 }

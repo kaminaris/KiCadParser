@@ -96,4 +96,25 @@ export class KicadElementPin extends WithUUID(WithOrigin(KicadElement)) {
 		const hiddenChild = this.findFirstChildByClass(KicadElementHide);
 		return hiddenChild ? hiddenChild.value : false;
 	}
+
+	/** KiCad pin hide: `(pin … (hide yes) …)` — direct child, not under effects. */
+	setHidden(value: boolean) {
+		const found = this.findFirstChildByClass(KicadElementHide);
+		if (!value) {
+			if (found) {
+				const idx = this.children.indexOf(found);
+				if (idx >= 0) {
+					this.children.splice(idx, 1);
+				}
+			}
+			return;
+		}
+		if (!found) {
+			const hide = new KicadElementHide();
+			hide.value = true;
+			this.addChild(hide);
+			return;
+		}
+		found.value = true;
+	}
 }

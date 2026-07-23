@@ -26,7 +26,7 @@ export class KicadElementXY extends KicadElement {
 	}
 
 	override write(): string {
-		return this.pad() + `(${ this.name } ${ this.x } ${ this.y })`;
+		return this.pad() + `(${ this.name } ${ this.round(this.x) } ${ this.round(this.y) })`;
 	}
 }
 
@@ -80,6 +80,6 @@ export class KicadElementXYZ extends KicadElement {
 	}
 
 	override write(): string {
-		return this.pad() + `(${ this.name } ${ this.x } ${ this.y } ${ this.z })`;
+		return this.pad() + `(${ this.name } ${ this.round(this.x) } ${ this.round(this.y) } ${ this.round(this.z) })`;
 	}
 }
