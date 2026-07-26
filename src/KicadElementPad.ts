@@ -4,9 +4,12 @@ import { WithOrigin }         from './Mixins/WithOrigin';
 import { KicadElement }       from './KicadElement';
 import { WithSize }           from './Mixins/WithSize';
 import { WithUUID }           from './Mixins/WithUUID';
+import { KicadElementPts }    from './KicadElementPts';
+import { KicadElementXY }     from './KicadElementXY';
+import { KicadElementGrPoly } from './KicadElementPolygon';
 
-export type KicadPadShape = 'oval' | 'rect' | 'trapezoid' | 'circle' | 'roundrect';
-export const KicadPadShapes: KicadPadShape[] = ['oval', 'rect', 'trapezoid', 'circle', 'roundrect'];
+export type KicadPadShape = 'oval' | 'rect' | 'trapezoid' | 'circle' | 'roundrect' | 'custom';
+export const KicadPadShapes: KicadPadShape[] = ['oval', 'rect', 'trapezoid', 'circle', 'roundrect', 'custom'];
 
 /**
  * 	(pad "1" thru_hole circle
@@ -36,6 +39,75 @@ export class KicadElementPad extends WithUUID(WithDrill(WithSize(WithOrigin(Kica
 		if (width !== undefined && height !== undefined) {
 			this.setSize(width, height);
 		}
+	}
+
+	/**
+	 * Emit a KiCad custom pad polygon (points relative to pad origin).
+	 *
+	 * 	(options (clearance outline) (anchor rect))
+	 * 	(primitives
+	 * 		(gr_poly (pts (xy …) …) (width 0) (fill yes))
+	 * 	)
+	 */
+	setCustomPolygon(points: Array<{ x: number; y: number }>, anchor: 'rect' | 'circle' = 'rect') {
+		this.shape = 'custom';
+
+		const options = this.findOrCreateChildByName('options');
+		options.clearChildren();
+		options.setSimpleChild('clearance', 'outline', 'literal');
+		options.setSimpleChild('anchor', anchor, 'literal');
+
+		const primitives = this.findOrCreateChildByName('primitives');
+		primitives.clearChildren();
+
+		// Pad-primitive gr_poly uses (width 0) (fill yes), not stroke/layer.
+		const grPoly = new KicadElement();
+		grPoly.name = 'gr_poly';
+		const pts = new KicadElementPts();
+		for (const p of points) {
+			pts.addChild(new KicadElementXY(p.x, p.y));
+		}
+		grPoly.addChild(pts);
+		grPoly.setSimpleChild('width', 0, 'numeric');
+		const fill = new KicadElement();
+		fill.name = 'fill';
+		fill.setAttribute({ value: 'yes', format: 'literal' });
+		grPoly.addChild(fill);
+		primitives.addChild(grPoly);
+	}
+
+	/** Polygon rings from `(primitives (gr_poly …))`, pad-local coordinates. */
+	getCustomPolygonPoints(): Array<Array<{ x: number; y: number }>> {
+		const primitives = this.findFirstChildByName('primitives');
+		if (!primitives) {
+			return [];
+		}
+		const rings: Array<Array<{ x: number; y: number }>> = [];
+		for (const child of primitives.children) {
+			if (child.name !== 'gr_poly') {
+				continue;
+			}
+			let points: Array<{ x: number; y: number }> = [];
+			if (typeof (child as KicadElementGrPoly).getPoints === 'function') {
+				points = (child as KicadElementGrPoly).getPoints();
+			}
+			else {
+				const pts = child.findFirstChildByClass(KicadElementPts)
+					?? child.findFirstChildByName('pts');
+				if (pts) {
+					points = pts.children
+						.filter((c): c is KicadElementXY => c instanceof KicadElementXY || c.name === 'xy')
+						.map(c => ({
+							x: (c as KicadElementXY).x,
+							y: (c as KicadElementXY).y
+						}));
+				}
+			}
+			if (points.length >= 3) {
+				rings.push(points);
+			}
+		}
+		return rings;
 	}
 
 	/**

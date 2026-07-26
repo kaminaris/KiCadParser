@@ -1,6 +1,8 @@
 import { KicadElement } from './KicadElement';
 
 export class KicadElementPts extends KicadElement {
+	override name = 'pts';
+
 	override writeChildren(): string {
 		if (this.children.length <= 0) {
 			return '';
