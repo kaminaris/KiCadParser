@@ -1,7 +1,9 @@
 import { KicadElementAttributes } from './KicadElementAttributes';
 import {
-	KicadElementBold, KicadElementDnp, KicadElementExcludeFromSim, KicadElementFieldsAutoplaced, KicadElementHide,
-	KicadElementInBom, KicadElementItalic, KicadElementOnBoard, KicadElementUnlocked
+	KicadElementBold, KicadElementDnp, KicadElementDoNotAutoplace, KicadElementDuplicatePinNumbersAreJumpers,
+	KicadElementEmbeddedFonts, KicadElementExcludeFromSim, KicadElementFieldsAutoplaced, KicadElementHide,
+	KicadElementInBom, KicadElementInPosFiles, KicadElementItalic, KicadElementOnBoard, KicadElementShowName,
+	KicadElementUnlocked
 }                                 from './KicadElementBoolean';
 import {
 	KicadElementDiameter, KicadElementIslandAreaMin, KicadElementIslandRemovalMode, KicadElementLength,
@@ -42,6 +44,7 @@ import { KicadElementPad }                                                    fr
 import { KicadElementZone }                                                   from './KicadElementZone';
 import { KicadElementLayers }                                                 from './KicadElementLayers';
 import { KicadElementPinNumbers }                                             from './KicadElementPinNumbers';
+import { KicadElementPinNames }                                               from './KicadElementPinNames';
 import { KicadElementGlobalLabel }                                            from './KicadElementGlobalLabel';
 import { KicadElementJunction }                                               from './KicadElementJunction';
 import { KicadElementShape }                                                  from './KicadElementLiteral';
@@ -111,6 +114,7 @@ export class KicadParser {
 		'width': KicadElementWidth,
 		'offset': KicadElementOffset,
 		'pin_numbers': KicadElementPinNumbers,
+		'pin_names': KicadElementPinNames,
 		'pad': KicadElementPad,
 		'size': KicadElementSize,
 		'drill': KicadElementDrill,
@@ -210,6 +214,11 @@ export class KicadParser {
 		'fields_autoplaced': KicadElementFieldsAutoplaced,
 		'unlocked': KicadElementUnlocked,
 		'hide': KicadElementHide,
+		'in_pos_files': KicadElementInPosFiles,
+		'duplicate_pin_numbers_are_jumpers': KicadElementDuplicatePinNumbersAreJumpers,
+		'embedded_fonts': KicadElementEmbeddedFonts,
+		'show_name': KicadElementShowName,
+		'do_not_autoplace': KicadElementDoNotAutoplace,
 		'pin': KicadElementPin,
 
 		/** Structural containers */

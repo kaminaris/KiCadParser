@@ -17,7 +17,10 @@ export class KicadElementStroke extends KicadElement {
 
 	getWidth() {
 		const widthChild = this.findFirstChildByClass(KicadElementWidth);
-		return widthChild?.value ? widthChild?.value : 0.2;
+		if (!widthChild || widthChild.value === undefined || widthChild.value === null) {
+			return 0.2;
+		}
+		return widthChild.value;
 	}
 
 	setType(type: KicadStrokeType) {

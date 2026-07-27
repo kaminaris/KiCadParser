@@ -94,7 +94,11 @@ export class KicadElementPin extends WithUUID(WithOrigin(KicadElement)) {
 
 	isHidden() {
 		const hiddenChild = this.findFirstChildByClass(KicadElementHide);
-		return hiddenChild ? hiddenChild.value : false;
+		if (hiddenChild) {
+			return hiddenChild.value;
+		}
+		// KiCad 8 bare flag: `(pin … hide …)` stores hide as an attribute.
+		return this.attributes.some(a => a.value === 'hide' || a.value === true);
 	}
 
 	/** KiCad pin hide: `(pin … (hide yes) …)` — direct child, not under effects. */

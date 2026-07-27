@@ -66,3 +66,28 @@ export class KicadElementOnBoard extends KicadElementBoolean {
 export class KicadElementUnlocked extends KicadElementBoolean {
 	override name = 'unlocked';
 }
+
+/** KiCad 10 schematic / library: `(in_pos_files yes|no)`. */
+export class KicadElementInPosFiles extends KicadElementBoolean {
+	override name = 'in_pos_files';
+}
+
+/** KiCad 10 library: `(duplicate_pin_numbers_are_jumpers yes|no)`. */
+export class KicadElementDuplicatePinNumbersAreJumpers extends KicadElementBoolean {
+	override name = 'duplicate_pin_numbers_are_jumpers';
+}
+
+/** KiCad 10: `(embedded_fonts yes|no)`. */
+export class KicadElementEmbeddedFonts extends KicadElementBoolean {
+	override name = 'embedded_fonts';
+}
+
+/** KiCad 10 property: `(show_name yes|no)`. */
+export class KicadElementShowName extends KicadElementBoolean {
+	override name = 'show_name';
+}
+
+/** KiCad 10 property: `(do_not_autoplace yes|no)`. */
+export class KicadElementDoNotAutoplace extends KicadElementBoolean {
+	override name = 'do_not_autoplace';
+}

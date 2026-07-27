@@ -46,15 +46,21 @@ export class KicadElementJustify extends KicadElement {
 			this.mirrored = false;
 		}
 
-		if (this.attributes.length >= 1) {
-			const horiz = this.attributes[0].value as string;
-			this.horizontal = horiz as 'left' | 'middle' | 'right';
-
+		if (this.attributes.length === 1) {
+			const only = this.attributes[0].value as string;
+			// KiCad allows a lone vertical: `(justify bottom)`.
+			if (only === 'top' || only === 'bottom') {
+				this.vertical = only;
+			}
+			else {
+				this.horizontal = only as KicadJustifyHorizontal;
+			}
 		}
-
-		if (this.attributes.length === 2) {
-			const vert = this.attributes[1].value as string;
-			this.vertical = vert as 'top' | 'middle' | 'bottom';
+		else if (this.attributes.length >= 1) {
+			this.horizontal = this.attributes[0].value as KicadJustifyHorizontal;
+			if (this.attributes.length === 2) {
+				this.vertical = this.attributes[1].value as KicadJustifyVertical;
+			}
 		}
 
 		this.attributes.length = 0;

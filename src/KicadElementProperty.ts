@@ -3,7 +3,12 @@ import { WithEffects }                            from './Mixins/WithEffects';
 import { WithOrigin }                             from './Mixins/WithOrigin';
 import { WithJustify }                            from './Mixins/WithJustify';
 import { WithUUID }                               from './Mixins/WithUUID';
-import { KicadElementHide, KicadElementUnlocked } from './KicadElementBoolean';
+import {
+	KicadElementDoNotAutoplace,
+	KicadElementHide,
+	KicadElementShowName,
+	KicadElementUnlocked
+} from './KicadElementBoolean';
 import { KicadElementEffects } from './KicadElementEffects';
 import { KicadElement }                           from './KicadElement';
 
@@ -38,14 +43,60 @@ export class KicadElementProperty extends WithUUID(WithLayer(WithOrigin(WithEffe
 	}
 
 	override isHidden(): boolean {
-		// KiCad stores (hide yes) either as a direct child or nested
-		// inside (effects ... (hide yes)). Check both paths.
+		// KiCad 10 stores `(hide yes)` as a direct child of property.
+		// Older files nest it inside `(effects … (hide yes))`.
 		const hideChild = this.findFirstChildByClass(KicadElementHide);
 		if (hideChild) {
 			return hideChild.value;
 		}
 		const effects = this.findFirstChildByClass(KicadElementEffects);
 		return effects ? effects.isHidden() : false;
+	}
+
+	/**
+	 * KiCad 10 library properties write `(hide yes)` as a sibling of `(effects …)`,
+	 * not nested under effects.
+	 */
+	override setHidden(value: boolean) {
+		const effects = this.findFirstChildByClass(KicadElementEffects);
+		const effectsHide = effects?.findFirstChildByClass(KicadElementHide);
+		if (effectsHide && effects) {
+			const idx = effects.children.indexOf(effectsHide);
+			if (idx >= 0) {
+				effects.children.splice(idx, 1);
+			}
+		}
+		const found = this.findFirstChildByClass(KicadElementHide);
+		if (!value) {
+			if (found) {
+				const idx = this.children.indexOf(found);
+				if (idx >= 0) {
+					this.children.splice(idx, 1);
+				}
+			}
+			return;
+		}
+		if (!found) {
+			const hide = new KicadElementHide();
+			hide.value = true;
+			this.addChild(hide);
+			return;
+		}
+		found.value = true;
+	}
+
+	/** KiCad 10: `(show_name yes|no)`. */
+	setShowName(show: boolean): this {
+		const el = this.findOrCreateChildByClass(KicadElementShowName);
+		el.value = show;
+		return this;
+	}
+
+	/** KiCad 10: `(do_not_autoplace yes|no)`. */
+	setDoNotAutoplace(value: boolean): this {
+		const el = this.findOrCreateChildByClass(KicadElementDoNotAutoplace);
+		el.value = value;
+		return this;
 	}
 
 	override afterParse() {
