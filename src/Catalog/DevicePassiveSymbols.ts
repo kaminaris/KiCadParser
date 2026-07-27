@@ -10,54 +10,11 @@
 
 import {
 	PASSIVE_SYMBOL_BUILDERS,
-	buildResistor,
-	buildCapacitor,
-	buildInductor,
-	buildFerriteBead,
-	buildDiode,
-	buildSchottky,
-	buildLed,
-	buildPowerGnd,
-	buildResistorUs,
-	buildPotentiometer,
-	buildCapacitorPolarized,
-	buildCapacitorPolarizedUs,
-	buildZener,
-	buildCrystal,
-	buildFuse,
-	buildTvs,
-	buildNmos,
-	buildNpn,
-	buildPmos,
-	buildPnp,
-	buildThermistor,
-	buildThermistorNtc
+	type PassiveSymbolLibId
 } from '../Builder/PassiveSymbolBuilder';
 
 /** Preferred name for catalog lib ids (Device:* + power:*). */
-export type DeviceLibId =
-	| 'Device:R'
-	| 'Device:C'
-	| 'Device:L'
-	| 'Device:FerriteBead'
-	| 'Device:D'
-	| 'Device:D_Schottky'
-	| 'Device:LED'
-	| 'Device:R_US'
-	| 'Device:R_Potentiometer'
-	| 'Device:C_Polarized'
-	| 'Device:C_Polarized_US'
-	| 'Device:D_Zener'
-	| 'Device:Crystal'
-	| 'Device:Fuse'
-	| 'Device:D_TVS'
-	| 'Device:Q_NMOS'
-	| 'Device:Q_NPN'
-	| 'Device:Q_PMOS'
-	| 'Device:Q_PNP'
-	| 'Device:Thermistor'
-	| 'Device:Thermistor_NTC'
-	| 'power:GND';
+export type DeviceLibId = PassiveSymbolLibId;
 
 /** @deprecated Prefer {@link DeviceLibId}. */
 export type PassiveLibId = DeviceLibId;
@@ -77,57 +34,38 @@ function writeSymbol(builder: () => { write(): string }): string {
 	return builder().write().trim();
 }
 
-export const PASSIVE_SYMBOL_R = writeSymbol(buildResistor);
-export const PASSIVE_SYMBOL_C = writeSymbol(buildCapacitor);
-export const PASSIVE_SYMBOL_L = writeSymbol(buildInductor);
-export const PASSIVE_SYMBOL_FERRITE = writeSymbol(buildFerriteBead);
-export const PASSIVE_SYMBOL_D = writeSymbol(buildDiode);
-export const PASSIVE_SYMBOL_D_SCHOTTKY = writeSymbol(buildSchottky);
-export const PASSIVE_SYMBOL_LED = writeSymbol(buildLed);
-export const POWER_SYMBOL_GND = writeSymbol(buildPowerGnd);
-export const PASSIVE_SYMBOL_R_US = writeSymbol(buildResistorUs);
-export const PASSIVE_SYMBOL_R_POT = writeSymbol(buildPotentiometer);
-export const PASSIVE_SYMBOL_C_POL = writeSymbol(buildCapacitorPolarized);
-export const PASSIVE_SYMBOL_C_POL_US = writeSymbol(buildCapacitorPolarizedUs);
-export const PASSIVE_SYMBOL_D_ZENER = writeSymbol(buildZener);
-export const PASSIVE_SYMBOL_CRYSTAL = writeSymbol(buildCrystal);
-export const PASSIVE_SYMBOL_FUSE = writeSymbol(buildFuse);
-export const PASSIVE_SYMBOL_D_TVS = writeSymbol(buildTvs);
-export const PASSIVE_SYMBOL_Q_NMOS = writeSymbol(buildNmos);
-export const PASSIVE_SYMBOL_Q_NPN = writeSymbol(buildNpn);
-export const PASSIVE_SYMBOL_Q_PMOS = writeSymbol(buildPmos);
-export const PASSIVE_SYMBOL_Q_PNP = writeSymbol(buildPnp);
-export const PASSIVE_SYMBOL_THERMISTOR = writeSymbol(buildThermistor);
-export const PASSIVE_SYMBOL_THERMISTOR_NTC = writeSymbol(buildThermistorNtc);
+export const PASSIVE_LIB_BY_ID: Record<DeviceLibId, string> = Object.fromEntries(
+	(Object.entries(PASSIVE_SYMBOL_BUILDERS) as Array<[DeviceLibId, () => { write(): string }]>).map(
+		([libId, builder]) => [libId, writeSymbol(builder)]
+	)
+) as Record<DeviceLibId, string>;
 
-export const PASSIVE_LIB_BY_ID: Record<DeviceLibId, string> = {
-	'Device:R': PASSIVE_SYMBOL_R,
-	'Device:C': PASSIVE_SYMBOL_C,
-	'Device:L': PASSIVE_SYMBOL_L,
-	'Device:FerriteBead': PASSIVE_SYMBOL_FERRITE,
-	'Device:D': PASSIVE_SYMBOL_D,
-	'Device:D_Schottky': PASSIVE_SYMBOL_D_SCHOTTKY,
-	'Device:LED': PASSIVE_SYMBOL_LED,
-	'Device:R_US': PASSIVE_SYMBOL_R_US,
-	'Device:R_Potentiometer': PASSIVE_SYMBOL_R_POT,
-	'Device:C_Polarized': PASSIVE_SYMBOL_C_POL,
-	'Device:C_Polarized_US': PASSIVE_SYMBOL_C_POL_US,
-	'Device:D_Zener': PASSIVE_SYMBOL_D_ZENER,
-	'Device:Crystal': PASSIVE_SYMBOL_CRYSTAL,
-	'Device:Fuse': PASSIVE_SYMBOL_FUSE,
-	'Device:D_TVS': PASSIVE_SYMBOL_D_TVS,
-	'Device:Q_NMOS': PASSIVE_SYMBOL_Q_NMOS,
-	'Device:Q_NPN': PASSIVE_SYMBOL_Q_NPN,
-	'Device:Q_PMOS': PASSIVE_SYMBOL_Q_PMOS,
-	'Device:Q_PNP': PASSIVE_SYMBOL_Q_PNP,
-	'Device:Thermistor': PASSIVE_SYMBOL_THERMISTOR,
-	'Device:Thermistor_NTC': PASSIVE_SYMBOL_THERMISTOR_NTC,
-	'power:GND': POWER_SYMBOL_GND
-};
+export const PASSIVE_SYMBOL_R = PASSIVE_LIB_BY_ID['Device:R'];
+export const PASSIVE_SYMBOL_C = PASSIVE_LIB_BY_ID['Device:C'];
+export const PASSIVE_SYMBOL_L = PASSIVE_LIB_BY_ID['Device:L'];
+export const PASSIVE_SYMBOL_FERRITE = PASSIVE_LIB_BY_ID['Device:FerriteBead'];
+export const PASSIVE_SYMBOL_D = PASSIVE_LIB_BY_ID['Device:D'];
+export const PASSIVE_SYMBOL_D_SCHOTTKY = PASSIVE_LIB_BY_ID['Device:D_Schottky'];
+export const PASSIVE_SYMBOL_LED = PASSIVE_LIB_BY_ID['Device:LED'];
+export const POWER_SYMBOL_GND = PASSIVE_LIB_BY_ID['power:GND'];
+export const PASSIVE_SYMBOL_R_US = PASSIVE_LIB_BY_ID['Device:R_US'];
+export const PASSIVE_SYMBOL_R_POT = PASSIVE_LIB_BY_ID['Device:R_Potentiometer'];
+export const PASSIVE_SYMBOL_C_POL = PASSIVE_LIB_BY_ID['Device:C_Polarized'];
+export const PASSIVE_SYMBOL_C_POL_US = PASSIVE_LIB_BY_ID['Device:C_Polarized_US'];
+export const PASSIVE_SYMBOL_D_ZENER = PASSIVE_LIB_BY_ID['Device:D_Zener'];
+export const PASSIVE_SYMBOL_CRYSTAL = PASSIVE_LIB_BY_ID['Device:Crystal'];
+export const PASSIVE_SYMBOL_FUSE = PASSIVE_LIB_BY_ID['Device:Fuse'];
+export const PASSIVE_SYMBOL_D_TVS = PASSIVE_LIB_BY_ID['Device:D_TVS'];
+export const PASSIVE_SYMBOL_Q_NMOS = PASSIVE_LIB_BY_ID['Device:Q_NMOS'];
+export const PASSIVE_SYMBOL_Q_NPN = PASSIVE_LIB_BY_ID['Device:Q_NPN'];
+export const PASSIVE_SYMBOL_Q_PMOS = PASSIVE_LIB_BY_ID['Device:Q_PMOS'];
+export const PASSIVE_SYMBOL_Q_PNP = PASSIVE_LIB_BY_ID['Device:Q_PNP'];
+export const PASSIVE_SYMBOL_THERMISTOR = PASSIVE_LIB_BY_ID['Device:Thermistor'];
+export const PASSIVE_SYMBOL_THERMISTOR_NTC = PASSIVE_LIB_BY_ID['Device:Thermistor_NTC'];
 
 /** Inner `(symbol …)` sexpr for a catalog lib id. */
 export function devicePassiveSymbol(libId: DeviceLibId): string {
-	return PASSIVE_SYMBOL_BUILDERS[libId]().write().trim();
+	return PASSIVE_SYMBOL_BUILDERS[libId as keyof typeof PASSIVE_SYMBOL_BUILDERS]().write().trim();
 }
 
 /** Pasteable `(lib_symbols …)` wrapper used by BOM clipboard. */
