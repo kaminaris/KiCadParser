@@ -44,13 +44,24 @@ export class KicadElementPad extends WithUUID(WithDrill(WithSize(WithOrigin(Kica
 	/**
 	 * Emit a KiCad custom pad polygon (points relative to pad origin).
 	 *
-	 * 	(options (clearance outline) (anchor rect))
+	 * KiCad copper = **anchor (`size`) ∪ primitives**. Our preview draws only the
+	 * polygon, so a large EasyEDA `c_width`/`c_height` rect/circle as the anchor
+	 * looks fine here but becomes a "hammer" / fat rectangle in pcbnew.
+	 *
+	 * Keep the anchor as a tiny circle at the pad origin so the copper shape is
+	 * effectively the `gr_poly`. Clearance still follows the outline
+	 * (`clearance outline`).
+	 *
+	 * 	(size 0.01 0.01)
+	 * 	(options (clearance outline) (anchor circle))
 	 * 	(primitives
 	 * 		(gr_poly (pts (xy …) …) (width 0) (fill yes))
 	 * 	)
 	 */
-	setCustomPolygon(points: Array<{ x: number; y: number }>, anchor: 'rect' | 'circle' = 'rect') {
+	setCustomPolygon(points: Array<{ x: number; y: number }>, anchor: 'rect' | 'circle' = 'circle') {
 		this.shape = 'custom';
+		// Tiny thermal/clearance anchor — must stay > 0 for KiCad.
+		this.setSize(0.01, 0.01);
 
 		const options = this.findOrCreateChildByName('options');
 		options.clearChildren();
