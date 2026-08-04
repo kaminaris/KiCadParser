@@ -50,7 +50,7 @@ import { KicadElementJunction }                                               fr
 import { KicadElementShape }                                                  from './KicadElementLiteral';
 import { KicadElementNoConnect }                                              from './KicadElementNoConnect';
 import { KicadElementWire }                                                   from './KicadElementWire';
-import { KicadElementFpText, KicadElementGrText, KicadElementLabel, KicadElementText } from './KicadElementText';
+import { KicadElementFpText, KicadElementGrText, KicadElementLabel, KicadElementText, KicadElementTextBox } from './KicadElementText';
 import { KicadElementComment }                                                from './KicadElementComment';
 import { KicadElementTitleBlock }                                             from './KicadElementTitleBlock';
 import { KicadElementFill }                                                   from './KicadElementFill';
@@ -91,6 +91,7 @@ import { KicadElementGroup }                                                  fr
 import { KicadElementComponentClass, KicadElementComponentClasses }          from './KicadElementComponentClass';
 import { KicadElementRuleArea }                                              from './KicadElementRuleArea';
 import { KicadElementNetclassFlag }                                          from './KicadElementNetclassFlag';
+import { KicadElementTable, KicadElementTableCell }                          from './KicadElementTable';
 import { KicadElement }                                                       from './KicadElement';
 
 export type KicadToken = { type: 'paren' | 'string' | 'number' | 'symbol', value: string };
@@ -106,6 +107,8 @@ export class KicadParser {
 		'symbol': KicadElementSymbol,
 		'footprint': KicadElementFootprint,
 		'sheet': KicadElementSheet,
+		'table': KicadElementTable,
+		'table_cell': KicadElementTableCell,
 		'global_label': KicadElementGlobalLabel,
 		'net': KicadElementNet,
 		'layers': KicadElementLayers,
@@ -186,6 +189,7 @@ export class KicadParser {
 		'pinfunction': KicadElementPinFunction,
 		'rev': KicadElementRev,
 		'text': KicadElementText,
+		'text_box': KicadElementTextBox,
 		'label': KicadElementLabel,
 		'gr_text': KicadElementGrText,
 		'fp_text': KicadElementFpText,

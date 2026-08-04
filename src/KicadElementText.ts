@@ -3,6 +3,8 @@ import { WithOrigin }     from './Mixins/WithOrigin';
 import { WithEffects }    from './Mixins/WithEffects';
 import { WithJustify }    from './Mixins/WithJustify';
 import { WithLayer }      from './Mixins/WithLayer';
+import { WithFill }       from './Mixins/WithFill';
+import { WithStroke }     from './Mixins/WithStroke';
 import { WithUUID }       from './Mixins/WithUUID';
 import { KicadElement }   from './KicadElement';
 
@@ -33,6 +35,12 @@ export class KicadElementTextBase extends WithUUID(WithOrigin(WithEffects(WithJu
 
 export class KicadElementText extends KicadElementTextBase {
 	override name = 'text';
+}
+
+/** Root-level schematic text box. Its extent is defined by `(at ...)` plus
+ * `(size ...)`; margins, fill and stroke remain ordinary child elements. */
+export class KicadElementTextBox extends WithFill(WithStroke(KicadElementTextBase)) {
+	override name = 'text_box';
 }
 
 /**
