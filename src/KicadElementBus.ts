@@ -4,6 +4,7 @@ import { WithSize }    from './Mixins/WithSize';
 import { WithStroke }  from './Mixins/WithStroke';
 import { WithUUID }    from './Mixins/WithUUID';
 import { KicadElement } from './KicadElement';
+import { KicadElementAt } from './KicadElementAt';
 
 /**
  * (bus
@@ -26,4 +27,14 @@ export class KicadElementBus extends WithUUID(WithStroke(WithPts(KicadElement)))
  */
 export class KicadElementBusEntry extends WithUUID(WithStroke(WithSize(WithOrigin(KicadElement)))) {
 	override name = 'bus_entry';
+
+	/** Grammar is (at x y) — no rotation slot (orientation comes entirely
+	 *  from `size`'s diagonal direction). Same fix as KicadElementNoConnect/
+	 *  KicadElementJunction: WithOrigin's rotation param defaults to 0 and
+	 *  would write an invalid (at x y 0), so override to never touch it. */
+	override setOrigin(x: number, y: number): void {
+		const at = this.findOrCreateChildByClass(KicadElementAt);
+		at.x = x;
+		at.y = y;
+	}
 }

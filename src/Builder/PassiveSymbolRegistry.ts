@@ -2,11 +2,13 @@ import type { PassiveBuilder, PassiveSymbolOpts } from './PassiveSymbolTypes';
 import { buildFromCatalog, type SpecLibId } from './PassiveSymbolFromSpec';
 import {
 	buildCapacitorPolarizedUs,
+	buildPowerFlag,
 	buildPowerGnd,
 	buildResistorUs
 } from './PassiveSymbolManualVariants';
 
-export type PassiveSymbolLibId = SpecLibId | 'Device:R_US' | 'Device:C_Polarized_US' | 'power:GND';
+export type PassiveSymbolLibId =
+	SpecLibId | 'Device:R_US' | 'Device:C_Polarized_US' | 'power:GND' | 'power:PWR_FLAG';
 
 function makeCatalogBuilder(libId: SpecLibId): PassiveBuilder {
 	return (opts?: PassiveSymbolOpts) => buildFromCatalog(libId, opts);
@@ -55,5 +57,6 @@ export const PASSIVE_SYMBOL_BUILDERS = {
 	'Device:Q_PNP': buildPnp,
 	'Device:Thermistor': buildThermistor,
 	'Device:Thermistor_NTC': buildThermistorNtc,
-	'power:GND': buildPowerGnd
+	'power:GND': buildPowerGnd,
+	'power:PWR_FLAG': buildPowerFlag
 } satisfies Record<PassiveSymbolLibId, PassiveBuilder>;

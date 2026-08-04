@@ -1,4 +1,6 @@
 import { WithOrigin }        from './Mixins/WithOrigin';
+import { WithEffects }       from './Mixins/WithEffects';
+import { WithJustify }       from './Mixins/WithJustify';
 import { WithUUID }          from './Mixins/WithUUID';
 import { KicadElementShape } from './KicadElementLiteral';
 import { KicadElement }      from './KicadElement';
@@ -13,7 +15,7 @@ export type KicadHierarchicalLabelShape = 'input' | 'output' | 'bidirectional' |
  * 		(uuid "5d782e96-4798-4703-8ddb-594af9bbf673")
  * )
  */
-export class KicadElementHierarchicalLabel extends WithUUID(WithOrigin(KicadElement)) {
+export class KicadElementHierarchicalLabel extends WithUUID(WithOrigin(WithEffects(WithJustify(KicadElement)))) {
 	override name = 'hierarchical_label';
 
 	getName(): string {
@@ -25,11 +27,25 @@ export class KicadElementHierarchicalLabel extends WithUUID(WithOrigin(KicadElem
 		return this.attributes[0].value as string ?? '';
 	}
 
+	setName(name: string): void {
+		if (this.attributes.length === 0) {
+			this.attributes.push({ format: 'quoted', value: name });
+		}
+		else {
+			this.attributes[0].value = name;
+			this.attributes[0].format = 'quoted';
+		}
+	}
+
 	getShape(): KicadHierarchicalLabelShape {
 		const shape = this.findFirstChildByClass(KicadElementShape);
 		if (shape) {
 			return shape.value as KicadHierarchicalLabelShape;
 		}
 		return 'input';
+	}
+
+	setShape(shape: KicadHierarchicalLabelShape): void {
+		this.findOrCreateChildByClass(KicadElementShape).value = shape;
 	}
 }

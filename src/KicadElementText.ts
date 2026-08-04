@@ -35,6 +35,17 @@ export class KicadElementText extends KicadElementTextBase {
 	override name = 'text';
 }
 
+/**
+ * Local (net-name) label: (label "NET" (at x y rot) (effects ..) (uuid ..)).
+ * Previously had no registered class (fell through to a generic KicadElement,
+ * read back generically by SchematicPainter.buildLocalLabel) — this fixes
+ * that gap so it round-trips through the same construct-and-attach pattern
+ * as every other edit-mode element.
+ */
+export class KicadElementLabel extends KicadElementTextBase {
+	override name = 'label';
+}
+
 export class KicadElementGrText extends WithLayer(WithLayerColor(KicadElementTextBase)) {
 	override name = 'gr_text';
 }

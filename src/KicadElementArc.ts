@@ -7,6 +7,14 @@ import { WithStroke }      from './Mixins/WithStroke';
 import { WithUUID }        from './Mixins/WithUUID';
 
 /**
+ * Symbol-library arcs carry no uuid; top-level SCHEMATIC arcs are a separate
+ * real KiCad form that DOES (see kicad-io/test/fixtures/kicad-qa/eeschema/
+ * api_kitchen_sink.kicad_sch). WithUUID covers both without a format split:
+ * parsing never calls setUuid() on its own, so a parsed library arc simply has
+ * no uuid child and write() reproduces that (getUuid() returns undefined,
+ * nothing to emit); freshly-constructed schematic-root arcs get a real uuid
+ * from an explicit setUuid() call at creation time.
+ *
  * (arc
  * 	(start -2.032 -1.27)
  * 	(mid 0 -0.5572)
@@ -15,7 +23,7 @@ import { WithUUID }        from './Mixins/WithUUID';
  * 	(fill (type none))
  * )
  */
-export class KicadElementArc extends WithStartMidEnd(WithStroke(WithFill(KicadElement))) {
+export class KicadElementArc extends WithUUID(WithStartMidEnd(WithStroke(WithFill(KicadElement)))) {
 	override name = 'arc';
 }
 

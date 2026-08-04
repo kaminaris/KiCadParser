@@ -10,14 +10,19 @@ export function WithStartEnd<T extends Ctor<KicadElement>>(Base: T) {
 			endX?: number,
 			endY?: number
 		) {
+			// find-or-create, not addChild: callers (e.g. a live drag) may call
+			// this repeatedly on the same instance — addChild unconditionally
+			// would accumulate duplicate Start/End children on every call.
 			if (startX !== undefined && startY !== undefined) {
-				const s = new KicadElementStart(startX, startY);
-				this.addChild(s);
+				const s = this.findOrCreateChildByClass(KicadElementStart);
+				s.x = startX;
+				s.y = startY;
 			}
 
 			if (endX !== undefined && endY !== undefined) {
-				const e = new KicadElementEnd(endX, endY);
-				this.addChild(e);
+				const e = this.findOrCreateChildByClass(KicadElementEnd);
+				e.x = endX;
+				e.y = endY;
 			}
 		}
 

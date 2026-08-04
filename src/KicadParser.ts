@@ -50,7 +50,7 @@ import { KicadElementJunction }                                               fr
 import { KicadElementShape }                                                  from './KicadElementLiteral';
 import { KicadElementNoConnect }                                              from './KicadElementNoConnect';
 import { KicadElementWire }                                                   from './KicadElementWire';
-import { KicadElementFpText, KicadElementGrText, KicadElementText }           from './KicadElementText';
+import { KicadElementFpText, KicadElementGrText, KicadElementLabel, KicadElementText } from './KicadElementText';
 import { KicadElementComment }                                                from './KicadElementComment';
 import { KicadElementTitleBlock }                                             from './KicadElementTitleBlock';
 import { KicadElementFill }                                                   from './KicadElementFill';
@@ -186,6 +186,7 @@ export class KicadParser {
 		'pinfunction': KicadElementPinFunction,
 		'rev': KicadElementRev,
 		'text': KicadElementText,
+		'label': KicadElementLabel,
 		'gr_text': KicadElementGrText,
 		'fp_text': KicadElementFpText,
 		'shape': KicadElementShape,

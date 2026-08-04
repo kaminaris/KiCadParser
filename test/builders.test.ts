@@ -9,6 +9,10 @@ import { KicadElementInstances } from '../src/KicadElementInstances';
 import { KicadElementSymbol } from '../src/KicadElementSymbol';
 import { KicadElementLibSymbols } from '../src/KicadElementLibSymbols';
 import { KicadElementPinNames } from '../src/KicadElementPinNames';
+import { KicadElementPin } from '../src/KicadElementPin';
+import { KicadElementPolyline } from '../src/KicadElementPolyline';
+import { buildPowerFlag, buildPowerRail } from '../src/Builder/PassiveSymbolManualVariants';
+import { buildPowerSymbolInstance } from '../src/Builder/PowerSymbolInstance';
 import { buildResistor, PASSIVE_SYMBOL_BUILDERS } from '../src/Builder/PassiveSymbolBuilder';
 import {
 	PASSIVE_LIB_BY_ID,
@@ -185,6 +189,99 @@ describe('PassiveSymbolBuilder catalog', () => {
 		expect(written).toContain('(rectangle');
 		expect(written).toContain('(at 0 3.81 270)');
 		expect(written).toContain('(at 0 -3.81 90)');
+	});
+});
+
+describe('buildPowerFlag / buildPowerRail vs real KiCad power.kicad_sym truth', () => {
+	// Geometry below was extracted directly from
+	// shared/kicad-io/test/fixtures/kicad-qa/libraries/power.kicad_sym (PWR_FLAG,
+	// +3V3, +5V entries) — semantic assertions on the reparsed structure rather
+	// than a raw-text byte-diff, matching how this file's other builder tests work.
+
+	it('buildPowerFlag: power_out pin + flag-diamond polyline + #FLG/PWR_FLAG properties', () => {
+		const built = buildPowerFlag();
+		expect(built.symbolName).toBe('power:PWR_FLAG');
+		const reparsed = new KicadParser().parse(built.write()) as KicadElementSymbol;
+
+		const units = reparsed.findChildrenByClass(KicadElementSymbol);
+		const pin = units.flatMap(u => u.findChildrenByClass(KicadElementPin))[0];
+		expect(pin.getType()).toEqual({ electricalType: 'power_out', shape: 'line' });
+		expect(pin.getOrigin()).toEqual({ x: 0, y: 0, rotation: 90 });
+		expect(pin.getLength()).toBe(0);
+
+		const polyline = units.flatMap(u => u.findChildrenByClass(KicadElementPolyline))[0];
+		expect(polyline.getPoints()).toEqual([
+			{ x: 0, y: 0 }, { x: 0, y: 1.27 }, { x: -1.016, y: 1.905 },
+			{ x: 0, y: 2.54 }, { x: 1.016, y: 1.905 }, { x: 0, y: 1.27 }
+		]);
+
+		expect(reparsed.getPropertyByName('Reference')?.propertyValue).toBe('#FLG');
+		expect(reparsed.getPropertyByName('Reference')?.isHidden()).toBe(true);
+		expect(reparsed.getPropertyByName('Value')?.propertyValue).toBe('PWR_FLAG');
+		expect(reparsed.getPropertyByName('Value')?.isHidden()).toBe(false);
+	});
+
+	it.each(['+3V3', '+5V'])('buildPowerRail(%s): power_in pin + up-arrow polylines + #PWR properties', (name) => {
+		const built = buildPowerRail(name);
+		expect(built.symbolName).toBe(`power:${ name }`);
+		const reparsed = new KicadParser().parse(built.write()) as KicadElementSymbol;
+
+		const units = reparsed.findChildrenByClass(KicadElementSymbol);
+		const pin = units.flatMap(u => u.findChildrenByClass(KicadElementPin))[0];
+		expect(pin.getType()).toEqual({ electricalType: 'power_in', shape: 'line' });
+		expect(pin.getOrigin()).toEqual({ x: 0, y: 0, rotation: 90 });
+		expect(pin.getLength()).toBe(0);
+
+		const polylines = units.flatMap(u => u.findChildrenByClass(KicadElementPolyline));
+		expect(polylines.map(p => p.getPoints())).toEqual([
+			[{ x: -0.762, y: 1.27 }, { x: 0, y: 2.54 }],
+			[{ x: 0, y: 0 }, { x: 0, y: 2.54 }],
+			[{ x: 0, y: 2.54 }, { x: 0.762, y: 1.27 }]
+		]);
+
+		expect(reparsed.getPropertyByName('Reference')?.propertyValue).toBe('#PWR');
+		expect(reparsed.getPropertyByName('Reference')?.isHidden()).toBe(true);
+		expect(reparsed.getPropertyByName('Value')?.propertyValue).toBe(name);
+		expect(reparsed.getPropertyByName('Value')?.isHidden()).toBe(false);
+	});
+
+	it('buildPowerRail: two different voltages come from the same geometry, only text differs', () => {
+		const railA = buildPowerRail('+3.3V').write();
+		const railB = buildPowerRail('+12V').write();
+		const stripName = (s: string) => s.replace(/\+3\.3V|\+12V/g, 'X');
+		expect(stripName(railA)).toBe(stripName(railB));
+	});
+});
+
+describe('buildPowerSymbolInstance', () => {
+	it('builds a schematic-level instance round-tripping lib_id/at/uuid/properties', () => {
+		const instance = buildPowerSymbolInstance({
+			libId: 'power:GND', x: 101.6, y: 63.5, rotation: 0,
+			ref: '#PWR03', value: 'GND',
+			refOffsetY: -6.35, valueOffsetY: -3.81, refHidden: true, valueHidden: true
+		});
+
+		expect(instance.getLibId()).toBe('power:GND');
+		expect(instance.symbolName).toBeUndefined(); // instance, not a library definition
+		expect(instance.getOrigin()).toEqual({ x: 101.6, y: 63.5, rotation: 0 });
+		expect(instance.getUuid()).toBeTruthy();
+
+		const reparsed = new KicadParser().parse(instance.write()) as KicadElementSymbol;
+		expect(reparsed.getLibId()).toBe('power:GND');
+		expect(reparsed.getReference()).toBe('#PWR03');
+		expect(reparsed.getPropertyByName('Value')?.propertyValue).toBe('GND');
+		expect(reparsed.getUnitId()).toBe(1);
+		expect(reparsed.isDnp()).toBe(false);
+	});
+
+	it('visible Value property is offset away from the symbol origin, not stacked on top of it', () => {
+		const instance = buildPowerSymbolInstance({
+			libId: 'power:PWR_FLAG', x: 50, y: 50, rotation: 0,
+			ref: '#FLG01', value: 'PWR_FLAG',
+			refOffsetY: 1.905, valueOffsetY: 3.81, refHidden: true, valueHidden: false
+		});
+		const valueProp = instance.getPropertyByName('Value')!;
+		expect(valueProp.getOrigin()).toEqual({ x: 50, y: 53.81, rotation: 0 });
 	});
 });
 
