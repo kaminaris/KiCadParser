@@ -19,10 +19,13 @@ export class KicadElementTableCell extends WithUUID(WithOrigin(WithEffects(WithJ
 	value = '';
 
 	override afterParse(): void {
-		if (this.attributes.length !== 1) {
+		// Empty cells are emitted by KiCad as `(table_cell ...)` with no text
+		// attribute. They are valid cells and must survive parse/serialize
+		// cycles (including undo snapshots).
+		if (this.attributes.length > 1) {
 			throw new Error(`${this.name} expects exactly one text attribute, got ${this.attributes.length}`);
 		}
-		this.value = String(this.attributes[0]!.value);
+		this.value = this.attributes.length === 1 ? String(this.attributes[0]!.value) : '';
 		this.attributes.length = 0;
 	}
 }
