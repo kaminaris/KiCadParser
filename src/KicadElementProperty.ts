@@ -92,6 +92,10 @@ export class KicadElementProperty extends WithUUID(WithLayer(WithOrigin(WithEffe
 		return this;
 	}
 
+	getShowName(): boolean {
+		return this.findFirstChildByClass(KicadElementShowName)?.value ?? false;
+	}
+
 	/** KiCad 10: `(do_not_autoplace yes|no)`. */
 	setDoNotAutoplace(value: boolean): this {
 		const el = this.findOrCreateChildByClass(KicadElementDoNotAutoplace);

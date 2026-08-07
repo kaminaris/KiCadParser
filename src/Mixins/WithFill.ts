@@ -1,6 +1,7 @@
 import { Ctor }                            from './Ctor';
 import { KicadElementFill, KicadFillType } from '../KicadElementFill';
 import { KicadElementLayer }               from '../KicadElementLayer';
+import { KicadElementColor }               from '../KicadElementColor';
 import { KicadElement }                    from '../KicadElement';
 
 export function WithFill<T extends Ctor<KicadElement>>(Base: T) {
@@ -32,6 +33,24 @@ export function WithFill<T extends Ctor<KicadElement>>(Base: T) {
 				default:
 					return defaultColor;
 			}
+		}
+
+		setFillColor(r: number, g: number, b: number, a: number) {
+			this.findOrCreateChildByClass(KicadElementFill).setColor(r, g, b, a);
+		}
+
+		/** null distinguishes "no (color …) child at all" from "explicitly
+		 *  set", INCLUDING a present-but-all-zero color (real KiCad's own
+		 *  COLOR4D::UNSPECIFIED sentinel) — same reasoning as WithStroke.
+		 *  getStrokeColorOverride(). Only meaningful when getFill() ===
+		 *  'color'; harmless to call otherwise. */
+		getFillColorOverride(): string | null {
+			const fill = this.findFirstChildByClass(KicadElementFill);
+			const color = fill?.findFirstChildByClass(KicadElementColor);
+			if (!color || (color.red === 0 && color.green === 0 && color.blue === 0 && color.alpha === 0)) {
+				return null;
+			}
+			return fill!.getColor();
 		}
 	};
 }

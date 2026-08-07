@@ -21,7 +21,7 @@ import {
 } from './KicadElementNumericFixed';
 import {
 	KicadElementCompany, KicadElementDate, KicadElementFace, KicadElementGenerator, KicadElementGeneratorVersion,
-	KicadElementLibId, KicadElementNetName, KicadElementNetTiePadGroups, KicadElementPinFunction,
+	KicadElementExtends, KicadElementLibId, KicadElementNetName, KicadElementNetTiePadGroups, KicadElementPinFunction,
 	KicadElementPinType, KicadElementReference,
 	KicadElementRev, KicadElementTitle
 } from './KicadElementString';
@@ -47,7 +47,7 @@ import { KicadElementPinNumbers }                                             fr
 import { KicadElementPinNames }                                               from './KicadElementPinNames';
 import { KicadElementGlobalLabel }                                            from './KicadElementGlobalLabel';
 import { KicadElementJunction }                                               from './KicadElementJunction';
-import { KicadElementShape }                                                  from './KicadElementLiteral';
+import { KicadElementMirror, KicadElementShape }                              from './KicadElementLiteral';
 import { KicadElementNoConnect }                                              from './KicadElementNoConnect';
 import { KicadElementWire }                                                   from './KicadElementWire';
 import { KicadElementFpText, KicadElementGrText, KicadElementLabel, KicadElementText, KicadElementTextBox } from './KicadElementText';
@@ -194,6 +194,7 @@ export class KicadParser {
 		'gr_text': KicadElementGrText,
 		'fp_text': KicadElementFpText,
 		'shape': KicadElementShape,
+		'mirror': KicadElementMirror,
 		'company': KicadElementCompany,
 		'comment': KicadElementComment,
 		'title_block': KicadElementTitleBlock,
@@ -202,6 +203,7 @@ export class KicadParser {
 		'generator': KicadElementGenerator,
 		'generator_version': KicadElementGeneratorVersion,
 		'lib_id': KicadElementLibId,
+		'extends': KicadElementExtends,
 		'reference': KicadElementReference,
 		'font': KicadElementFont,
 		'effects': KicadElementEffects,

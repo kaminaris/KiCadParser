@@ -12,7 +12,8 @@ import { WithOrigin }             from './Mixins/WithOrigin';
 import { WithProperties }         from './Mixins/WithProperties';
 import { WithUUID }               from './Mixins/WithUUID';
 import { KicadElementUnit }       from './KicadElementNumeric';
-import { KicadElementLibId }      from './KicadElementString';
+import { KicadElementExtends, KicadElementLibId } from './KicadElementString';
+import { KicadElementMirror } from './KicadElementLiteral';
 import { KicadElementPinNames }   from './KicadElementPinNames';
 import { KicadElementPinNumbers } from './KicadElementPinNumbers';
 import { KicadElement }           from './KicadElement';
@@ -68,8 +69,79 @@ export class KicadElementSymbol extends WithUUID(WithOrigin(WithProperties(Kicad
 		return libIdProp?.value ?? undefined;
 	}
 
+	/** `(extends "Base")` — the parent library symbol's name, unqualified
+	 *  (matches how it's written: plain symbol name, no library prefix, per
+	 *  sch_io_kicad_sexpr_parser.cpp's T_extends case). Only meaningful on a
+	 *  top-level LIBRARY symbol (a `lib_symbols` entry), never on a placed
+	 *  instance. */
+	getExtends(): string | undefined {
+		return this.findFirstChildByClass(KicadElementExtends)?.value || undefined;
+	}
+
+	isDerived(): boolean {
+		return !!this.getExtends();
+	}
+
+	setExtends(baseName: string | undefined): void {
+		if (!baseName) {
+			const existing = this.findFirstChildByClass(KicadElementExtends);
+			if (existing) {
+				const idx = this.children.indexOf(existing);
+				if (idx >= 0) this.children.splice(idx, 1);
+			}
+			return;
+		}
+		this.findOrCreateChildByClass(KicadElementExtends).value = baseName;
+	}
+
+	/** `(mirror x)` / `(mirror y)` on a PLACED symbol instance — meaningful
+	 *  only there, never on a library definition. Deliberately a plain
+	 *  replace, not real KiCad's own incremental-transform composition
+	 *  (`SCH_SYMBOL::SetOrientation`, which folds mirror+rotation together
+	 *  and can turn a mirror-then-mirror into a net rotation) — this app's
+	 *  own SchematicPainter.readMirror()/buildInstanceMatrix already only
+	 *  ever model one mutually-exclusive axis-or-none, matching the
+	 *  normalized state real KiCad itself collapses "both axes" down to
+	 *  (its own header comment: "MIRROR_Y is returned as MIRROR_X with an
+	 *  orientation 180", i.e. mirroring both axes IS a 180° rotation) — so
+	 *  this simpler replace-only setter is correct for THIS app's model,
+	 *  just not a full port of KiCad's own compose-with-rotation state
+	 *  machine. */
+	getMirror(): 'x' | 'y' | null {
+		const value = this.findFirstChildByClass(KicadElementMirror)?.value;
+		return value === 'x' || value === 'y' ? value : null;
+	}
+
+	setMirror(axis: 'x' | 'y' | null): void {
+		if (!axis) {
+			const existing = this.findFirstChildByClass(KicadElementMirror);
+			if (existing) {
+				const idx = this.children.indexOf(existing);
+				if (idx >= 0) this.children.splice(idx, 1);
+			}
+			return;
+		}
+		this.findOrCreateChildByClass(KicadElementMirror).value = axis;
+	}
+
 	getLayers() {
 		return this.findChildrenByClass(KicadElementSymbol);
+	}
+
+	/** Highest `unit` found across this symbol's own sub-unit children (named
+	 *  "<LibName>_<unit>_<style>"), e.g. 5 for a quad-gate-plus-power-unit part
+	 *  like "4016". Unit 0 ("shared across every unit") doesn't count as a
+	 *  placeable unit. A symbol with no sub-units (single-unit part, or a
+	 *  derived symbol — callers resolve `extends` before calling this) is 1. */
+	getUnitCount(): number {
+		const layers = this.getLayers();
+		let max = 1;
+		for (const layer of layers) {
+			if (typeof layer.deconstructSymbolName !== 'function') continue;
+			const { unit } = layer.deconstructSymbolName();
+			if (unit > max) max = unit;
+		}
+		return max;
 	}
 
 	setSymbolName(name: string) {
@@ -459,5 +531,12 @@ export class KicadElementSymbol extends WithUUID(WithOrigin(WithProperties(Kicad
 		}
 
 		return dnpChild.value;
+	}
+
+	/** Set the placed symbol's do-not-populate attribute. */
+	setDnp(value = true): this {
+		const dnpChild = this.findOrCreateChildByClass(KicadElementDnp);
+		dnpChild.value = value;
+		return this;
 	}
 }

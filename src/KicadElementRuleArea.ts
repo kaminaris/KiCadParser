@@ -39,16 +39,32 @@ export class KicadElementRuleArea extends KicadElement {
 		return this.findFirstChildByClass(KicadElementDnp)?.value ?? false;
 	}
 
+	setDnp(value: boolean): void {
+		this.findOrCreateChildByClass(KicadElementDnp).value = value;
+	}
+
 	isExcludedFromSim(): boolean {
 		return this.findFirstChildByClass(KicadElementExcludeFromSim)?.value ?? false;
+	}
+
+	setExcludedFromSim(value: boolean): void {
+		this.findOrCreateChildByClass(KicadElementExcludeFromSim).value = value;
 	}
 
 	isInBom(): boolean {
 		return this.findFirstChildByClass(KicadElementInBom)?.value ?? true;
 	}
 
+	setInBom(value: boolean): void {
+		this.findOrCreateChildByClass(KicadElementInBom).value = value;
+	}
+
 	isOnBoard(): boolean {
 		return this.findFirstChildByClass(KicadElementOnBoard)?.value ?? true;
+	}
+
+	setOnBoard(value: boolean): void {
+		this.findOrCreateChildByClass(KicadElementOnBoard).value = value;
 	}
 
 	getPolyline(): KicadElementPolyline | undefined {

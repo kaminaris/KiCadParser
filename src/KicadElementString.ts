@@ -57,6 +57,17 @@ export class KicadElementLibId extends KicadElementString {
 	override name = 'lib_id';
 }
 
+/** `(symbol "Derived" (extends "Base") ...)` — a derived library symbol.
+ * Confirmed in the user's local KiCad checkout (sch_io_kicad_sexpr_parser.cpp's
+ * T_extends case -> LIB_SYMBOL::SetParentName): a derived symbol stores only
+ * this back-reference plus whatever properties it overrides — no graphics/
+ * pins of its own — real KiCad resolves LIB_SYMBOL::GetParent() transparently
+ * everywhere (drawing, pin lists, field defaults) rather than duplicating the
+ * base symbol's data into every derivative. */
+export class KicadElementExtends extends KicadElementString {
+	override name = 'extends';
+}
+
 export class KicadElementReference extends KicadElementString {
 	override name = 'reference';
 }

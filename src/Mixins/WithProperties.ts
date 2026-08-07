@@ -47,5 +47,18 @@ export function WithProperties<T extends Ctor<KicadElement>>(Base: T) {
 				prop.propertyValue = value;
 			}
 		}
+
+		/** Removes a property child by exact name — no-op if not found. Used
+		 *  by the Fields grid's row-delete action; real KiCad guards its own
+		 *  mandatory fields (Reference/Value/Footprint/Datasheet) from
+		 *  deletion at the UI layer, same as this app does at its call site,
+		 *  not here (this method itself is unconditional, matching every
+		 *  other delete-by-identity method in this codebase). */
+		deleteProperty(name: string) {
+			const idx = this.children.findIndex(c => c instanceof KicadElementProperty && c.propertyName === name);
+			if (idx >= 0) {
+				this.children.splice(idx, 1);
+			}
+		}
 	};
 }

@@ -35,4 +35,8 @@ export class KicadElementFill extends KicadElement {
 
 		return t.getColor();
 	}
+
+	setColor(r: number, g: number, b: number, a: number) {
+		this.findOrCreateChildByClass(KicadElementColor).setColor(r, g, b, a);
+	}
 }

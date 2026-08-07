@@ -1,5 +1,6 @@
 import { WithOrigin }         from './Mixins/WithOrigin';
 import { WithUUID }           from './Mixins/WithUUID';
+import { WithJustify }        from './Mixins/WithJustify';
 import { KicadElementHide }   from './KicadElementBoolean';
 import { KicadElementLength } from './KicadElementNumeric';
 import { KicadElementNumber } from './KicadElementNumber';
@@ -29,7 +30,7 @@ export type KicadPinShape = 'line'
 	| 'edge_clock_high'
 	| 'non_logic';
 
-export class KicadElementPin extends WithUUID(WithOrigin(KicadElement)) {
+export class KicadElementPin extends WithUUID(WithJustify(WithOrigin(KicadElement))) {
 	override name = 'pin';
 
 	setType(electricalType: KicadPinElectricalType, shape: KicadPinShape) {

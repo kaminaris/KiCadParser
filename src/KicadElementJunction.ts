@@ -41,4 +41,20 @@ export class KicadElementJunction extends WithUUID(WithOrigin(KicadElement)) {
 	getColor(defaultColor = 'rgba(0,0,0,0)'): string {
 		return this.findFirstChildByClass(KicadElementColor)?.getColor() ?? defaultColor;
 	}
+
+	/** null distinguishes "no override" from "explicitly set" — same
+	 *  reasoning as WithStroke.getStrokeColorOverride(), with one extra
+	 *  wrinkle specific to junctions: shared/kicad-layout/Router.ts's own
+	 *  emitter always writes a literal (color 0 0 0 0), which is real
+	 *  KiCad's own COLOR4D::UNSPECIFIED sentinel (common/gal/color4d.cpp,
+	 *  confirmed in the user's local checkout) for "not customized" — not a
+	 *  genuine "render fully transparent" instruction — so a present-but-
+	 *  all-zero color child counts as unset too, not just an absent one. */
+	getColorOverride(): string | null {
+		const color = this.findFirstChildByClass(KicadElementColor);
+		if (!color || (color.red === 0 && color.green === 0 && color.blue === 0 && color.alpha === 0)) {
+			return null;
+		}
+		return color.getColor();
+	}
 }
